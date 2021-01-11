@@ -1,0 +1,107 @@
+
+<mk-box [isLoading]="isLoading"  [isCollapsable]="false" [isRemovable]="false">
+  <div class="box-header">
+    <h3 class="box-title">User Listing</h3>
+
+    <!--Tabs-->
+    <div style="width:23%" class="nav-tabs-custom">
+      <ul class="nav nav-tabs">
+        <li [ngClass]="{'active':selectedTab==''}"><a (click)="changeTab('')" href="javascript:void()">All</a></li>
+        <!--<li [ngClass]="{'active':selectedTab=='AGENCY'}"><a (click)="changeTab('AGENCY')" href="#tab_2" href="javascript:void()">Agency</a></li>-->
+        <li [ngClass]="{'active':selectedTab=='AGENT'}"><a (click)="changeTab('AGENT')" href="#tab_3" href="javascript:void()">Agent</a></li>
+      </ul>
+    </div>
+    <!--Ends Here-->
+
+    <!--Search-->
+    <div class="box-tools search_box">
+        <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
+            <div class="input-group input-group-sm hidden-xs" style="width: 250px;">
+
+                <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Name, Email">
+
+                <p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
+                    <app-form-validation-errors errorPrefix="Name Or Email " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
+                </p>
+                <div class="input-group-btn">
+                <button type="submit" class="btn btn-default search_btn"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </form> 
+                  
+    </div>
+    <!--Ends Here-->
+
+    <a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
+        <i title="Reset Search" class="fa fa-repeat"></i> 
+    </a> 
+    
+  </div>
+  <!-- /.box-header -->
+
+  <div class="box-body table-responsive no-padding">
+    <table class="table table-hover">     
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Social Media</th>
+            <th>Properties/View</th>         
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="records.length>0">
+          <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: pagination.size, currentPage: pagination.pageNumber, totalItems: totalRecords }">
+            <td scope="row"><img class="listing-img" src="{{record?.profile_pic}}" onerror="this.src='assets/img/avatar.png'"></td>
+       
+            <td>{{record?.name}}</td>
+            <td>{{record?.email}}</td>
+            <td>{{record?.role |  firstLetterCapital}}</td>          
+            <td>
+              <ul style="width: 100px;padding: 0;">
+                <li *ngIf="(record?.facebook!=null) && (record?.facebook).length>0" class="list-inline-item"><a target="_blank" href="{{record?.facebook}}"><i class="fa fa-facebook"></i></a></li>
+                <li *ngIf="(record?.twitter!=null) && (record?.twitter).length>0" class="list-inline-item"><a target="_blank" href="{{record?.twitter}}"><i class="fa fa-twitter"></i></a></li>
+                <li *ngIf="(record?.instagram!=null) && (record?.instagram).length>0" class="list-inline-item"><a target="_blank" href="{{record?.instagram}}"><i class="fa fa-instagram"></i></a></li>
+                <li *ngIf="(record?.pinterest!=null) && (record?.pinterest).length>0" class="list-inline-item"><a target="_blank" href="{{record?.pinterest}}"><i class="fa fa-pinterest"></i></a></li>
+                <li *ngIf="(record?.google_plus!=null) && (record?.google_plus).length>0" class="list-inline-item"><a target="_blank" href="{{record?.google_plus}}"><i class="fa fa-google"></i></a></li>
+              </ul>
+            </td>       
+            <td>
+             
+              <a *ngIf="record?.dashboard[0]['property_count']>0" routerLink="/home/property/{{record._id}}/no"><span class="badge bg-green">{{record?.dashboard[0]['property_count']}}</span></a>
+
+              <span *ngIf="record?.dashboard[0]['property_count']==0" class="badge bg-red">{{record?.dashboard[0]['property_count']}}</span>
+              /
+              <span *ngIf="record?.dashboard[0]['property_view_count']>0" class="badge bg-green">{{record?.dashboard[0]['property_view_count']}}</span>
+              <span *ngIf="record?.dashboard[0]['property_view_count']==0" class="badge bg-red">{{record?.dashboard[0]['property_view_count']}}</span>
+            </td>
+           
+
+            <td>{{record?.is_active | firstLetterCapital}}</td>
+            <td>{{record?.created_at | date:'MMM dd, y'}}</td>
+            <td>
+             <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a>
+
+              | <a *ngIf="record.is_active=='INACTIVE'" title="Unlock User: Enable Login Permission" href="javascript:void(0)" (click)="changeStatus(record,'ACTIVE')"><i class="fa fa-fw fa-unlock-alt"></i></a>
+
+               <a *ngIf="record.is_active=='ACTIVE'" title="Lock User: Disable Login Permission" href="javascript:void(0)" (click)="changeStatus(record,'INACTIVE')"><i class="fa fa-fw fa-unlock"></i></a>
+              
+              </td>
+          </tr>          
+        </tbody>
+        <tbody *ngIf="records.length<=0" >
+          <tr>
+            <td style="text-align:center;" colspan="8">No Record Found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      <pagination-controls style="text-align:right" id="listing"  (pageChange)="nextpage($event)"></pagination-controls>
+      
+  
+    
+  </mk-box>

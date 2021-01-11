@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+  border-color: #eae3e3;
+}
+
+.modal-backdrop {
+  position: relative !important;
+}
+div#contentSection .modal-content {
+  position: absolute;
+  width: 100%;
+  top: 52px;
+}
+.modal-dialog {
+  width: 808px!important;  
+}
+
+ul.property_features {
+  padding: 0;
+  list-style: none;
+}
+
+.property_features li {
+  width: 100%;
+  padding: 7px 2px;
+}
+
+.property_features li span {
+  width: 47%;
+  display: inline-block;
+  font-weight: 700;;
+}
+
+.property_details_ul {
+  padding: 0;
+  list-style: none;
+  margin:0;
+}
+
+.property_details_ul li {
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.property_details_ul li p {
+  font-size: 15px;
+  font-weight: 700;
+  display: block;
+}
+
+.pl-5 {
+  padding-left: 15px;
+}
+ul.property_details_ul.pl-5 p.d-inline-block {
+  display: inline-block!important;
+}

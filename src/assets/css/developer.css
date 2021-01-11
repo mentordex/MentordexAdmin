@@ -1,0 +1,111 @@
+app-form-validation-errors{
+    color:red
+}
+.listing-img{
+    width: 40px;
+    border-radius: 6px;
+}
+.box-header.with-border{
+    border-bottom: 2px solid #00c0ef!important;
+}
+
+.search_btn {
+    position: absolute !important;
+    top: 0;
+    right: 0;
+}
+
+.search_box {
+    right: 40px !important;
+}
+
+.input-group .form-control:focus .search_btn{
+    z-index: 4 !important;
+}
+
+.searchbar_input {width: calc(100% - 42px);}
+#search_Form p.errorCls {
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    left: 5px;
+    top: 30px;
+}
+.list-inline-item{
+    display: inline-block;
+margin: 0 6px;
+}
+
+select.form-control.ng-untouched.ng-pristine.ng-valid {
+    display: inline-block;
+    width: auto;
+}
+.listing-view {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+.box-tools.search_box {
+    display: flex;
+    align-items: center;
+    position: relative;
+    right: 0!important;
+}
+
+
+.profile-img-icon > span {
+    width: 138px;
+    height: 138px;
+    display: block;
+}
+
+.profile-img-icon > span img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-img-icon {
+    display: inline-block;
+    position: relative;
+}
+
+.profile-img-icon p {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    background: #3c8dbc;
+    border-radius: 50px;
+    width: 40px;
+    height: 40px;
+    margin: auto;
+    border: 3px solid #fff;
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.profile-img-icon p i {
+    color: #fff;
+    cursor: pointer;
+}
+
+.profile-img-icon p input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+image-cropper .overlay {
+    top: unset !important;
+    outline: none !important;
+}

@@ -1,0 +1,87 @@
+<mk-box header="{{formStatus}} Amenity" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
+   
+      
+        <a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
+            <i class="fa fa-repeat"></i> Reset
+        </a>
+        
+        <!-- Add/Update Record-->
+        <form [formGroup]="amenityForm" (ngSubmit)="onSubmit()">
+            <div class="box-body">          
+            <div class="form-group">
+                <label>Title*</label>
+                <input formControlName="type" class="form-control" type="text" placeholder="Amenity Title">  
+                <p class="errorCls"  *ngIf="amenityForm.controls.type.touched || isFormSubmitted">
+                    <app-form-validation-errors errorPrefix="Title " [errors]="amenityForm.get('type').errors"></app-form-validation-errors>
+                </p>  
+            </div>         
+                
+            </div>
+            <!-- /.box-body -->
+    
+            <div class="box-footer">     
+            <button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="submit" class="btn btn-primary">{{formStatus}}</button>
+            </div>
+        </form>
+        <!-- End Here-->
+ 
+</mk-box>
+
+<mk-box [isLoading]="isLoading"  [isCollapsable]="false" [isRemovable]="false">
+   
+        <div class="box-header">
+            <h3 class="box-title">Amenities Listing</h3>
+
+            <div class="box-tools search_box">
+                <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
+                    <div class="input-group input-group-sm hidden-xs" style="width: 250px;">
+                        <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Title">
+                        <p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
+                            <app-form-validation-errors errorPrefix="Title " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
+                        </p>
+                        <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default search_btn"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </form> 
+                          
+            </div>
+            <a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
+                <i title="Reset Search" class="fa fa-repeat"></i> 
+            </a> 
+            
+        </div>
+        <!-- /.box-header -->
+
+        <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+                <thead>
+                <tr>          
+                    <th>Title</th>  
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody *ngIf="records.length>0">
+                    <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: pagination.size, currentPage: pagination.pageNumber, totalItems: totalRecords }">
+                        
+                        <td>{{record?.type}}</td>                  
+                        <td>{{record?.created_at | date:'MMM dd, y'}}</td>
+                        <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>
+                    </tr>          
+                </tbody>
+                <tbody *ngIf="records.length<=0" >
+                    <tr>
+                      <td style="text-align:center;" colspan="5">No Record Found.</td>
+                    </tr>
+                  </tbody>
+          </table>
+        </div>
+        <pagination-controls style="text-align:right" id="listing"  (pageChange)="nextpage($event)"></pagination-controls>
+   
+    
+      
+  
+    
+  </mk-box>
