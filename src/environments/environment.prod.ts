@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   APP_NAME:"Mentordex",
-  API_ENDPOINT: 'http://localhost:3000',
+  API_ENDPOINT: 'http://18.218.99.213:3000',
   MESSAGES:{
     "SUCCESSFULLY-LOGOUT":"Loggedout Successfully",
     "CHECKING-AUTHORIZATION":"Checking Authorization",
@@ -15,3 +15,4 @@ export const environment = {
     "SYSTEM-ERROR":"We got some system error. Please try again."
   }
 };
+
