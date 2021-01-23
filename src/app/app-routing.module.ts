@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { AdminAuthGuardService } from './core/guards/admin-auth-guard.service';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
@@ -20,6 +21,7 @@ const routes: Routes = [
       },
       {
         path: 'home',
+        canActivate: [AdminAuthGuardService], 
         loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
         data: {
           customLayout: false

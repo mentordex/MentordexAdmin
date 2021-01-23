@@ -11,11 +11,11 @@ import { environment } from '../../../environments/environment'
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-city',
-  templateUrl: './city.component.html',
-  styleUrls: ['./city.component.css']
+  selector: 'app-category',
+  templateUrl: './category.component.html',
+  styleUrls: ['./category.component.css']
 })
-export class CityComponent implements OnInit {
+export class CategoryComponent implements OnInit {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   isLoading:boolean = false;
@@ -41,9 +41,42 @@ export class CityComponent implements OnInit {
  
   }
 
- 
+ /*
+  fileChangeEvent(event: any): void { 
+
+    var files = event.target.files;
+    var file = files[0];
+   
+    if (files && file) {
+      console.log('yes');
+      var reader = new FileReader();
+      var that = this
+      reader.onload = function(e) {
+        // The file's text will be printed here
+        var binaryString = (e.target.result) as string;
+        that.addEditForm.patchValue({image:'data:image/svg+xml;base64,'+btoa(binaryString)})
+        console.log('form', that.addEditForm.value);
+      };
+      reader.onload =this._handleReaderLoaded.bind(this);
+
+      
+      
+    }
+
+    
+
+  }
+
+  _handleReaderLoaded(readerEvt) {
+    console.log('added');
+    var binaryString = readerEvt.target.result;
+    this.addEditForm.patchValue({image:'data:image/svg+xml;base64,'+btoa(binaryString)})
+    console.log('form', this.addEditForm.value);
+   }
+   */
   fileChangeEvent(event: any): void { 
     this.imageChangedEvent = event;
+    
   }
   imageCropped(event: ImageCroppedEvent) {
       this.croppedImage = event.base64;

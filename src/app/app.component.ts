@@ -14,7 +14,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.layoutService.isCustomLayout.subscribe((value: boolean) => {
-      this.customLayout = value;
+     // console.log('customLayout',this.customLayout)
+      if (localStorage.getItem('loggedinUserId')) {
+        this.customLayout = false;
+      }else{
+        this.customLayout = true;
+      }
+      
     });
   }
 }

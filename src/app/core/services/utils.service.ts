@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { ToastrManager } from 'ng6-toastr-notifications';//toaster class
 import { Router } from "@angular/router";
 //import shared services
@@ -96,6 +96,18 @@ processGetRequest(apiEndPoint){
   return this.httpClient
       .get(apiEndPoint)
 }
+
+imageUploadRequest(apiEndPoint, data){
+  console.log(data)
+
+  const headers = new HttpHeaders({
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Accept': 'application/json'
+  });
+  return this.httpClient
+      .post(apiEndPoint, data, {headers: headers})
+}
+
 
 
 }

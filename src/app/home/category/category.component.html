@@ -1,4 +1,4 @@
-<mk-box header="{{formStatus}} City" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
+<mk-box header="{{formStatus}} Category" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
   <a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
@@ -10,7 +10,7 @@
       <div class="box-body">          
         <div class="form-group">
             <label>Title*</label>
-            <input formControlName="title" class="form-control" type="text" placeholder="City Title">  
+            <input formControlName="title" class="form-control" type="text" placeholder="Category Title">  
             <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
                 <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
             </p>          
@@ -45,7 +45,7 @@
 
 <mk-box [isLoading]="isLoading"  [isCollapsable]="false" [isRemovable]="false">
   <div class="box-header">
-    <h3 class="box-title">City Listing</h3>
+    <h3 class="box-title">Category Listing</h3>
 
     <div class="box-tools search_box">
         <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
@@ -74,9 +74,7 @@
         <thead>
           <tr>
             <th></th>
-            <th>Title</th>
-            <th>Neighbourhoods</th>
-            <th>count</th>
+            <th>Title</th>         
             <th>created At</th>
             <th>Action</th>
           </tr>
@@ -86,13 +84,7 @@
             <td scope="row"><img class="listing-img" src="{{record?.image}}" onerror="this.src='assets/img/avatar.png'"></td>
        
             <td>{{record?.title}}</td>            
-            <td>
-             
-              <a *ngIf="(record?.neighbourhood).length>0" routerLink="/home/neighbourhood/{{record._id}}"><span class="badge bg-green">{{(record?.neighbourhood).length}}</span></a>
-
-              <span *ngIf="(record?.neighbourhood).length==0" class="badge bg-red">{{(record?.neighbourhood).length}}</span>
-            </td>
-            <td>{{record?.count}}</td>
+            
             <td>{{record?.created_at | date:'MMM dd, y'}}</td>
             <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>
           </tr>          

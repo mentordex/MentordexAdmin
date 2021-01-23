@@ -18,14 +18,16 @@ export class AdminAuthGuardService implements CanActivate {
     if (JSON.parse(localStorage.getItem("loggedinUser"))) {
       // logged in so return true
       return true;
-    }
-
-    
+    }   
+   
 
     // not logged in so redirect to login page with the return url     
     localStorage.clear();
     this.authService.isLoggedIn(false, '');
+    //window.location.reload();
     this.router.navigate(['/']);
+    
     return false;
   }
+
 }
