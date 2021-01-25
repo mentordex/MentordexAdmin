@@ -15,6 +15,10 @@
                 <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
             </p>          
         </div>
+        <div class="checkbox">
+          <label><input type="checkbox" formControlName="is_visible_on_home">List on home page</label>
+        </div>
+        
         <div class="form-group">
             <input type="file" (change)="fileChangeEvent($event)" />  
             <p class="text-center" *ngIf="croppedImage.length>0">Please Crop Image:</p>
@@ -74,7 +78,8 @@
         <thead>
           <tr>
             <th></th>
-            <th>Title</th>         
+            <th>Title</th>  
+            <th>Visible On Home</th>         
             <th>created At</th>
             <th>Action</th>
           </tr>
@@ -83,7 +88,8 @@
           <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: 10, currentPage: pagination.pageNumber, totalItems: totalRecords }">
             <td scope="row"><img class="listing-img" src="{{record?.image}}" onerror="this.src='assets/img/avatar.png'"></td>
        
-            <td>{{record?.title}}</td>            
+            <td>{{record?.title}}</td>
+            <td>{{record?.is_visible_on_home?'Yes':'No'}}</td>            
             
             <td>{{record?.created_at | date:'MMM dd, y'}}</td>
             <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>

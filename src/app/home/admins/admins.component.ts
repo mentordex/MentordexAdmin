@@ -92,6 +92,7 @@ export class AdminsComponent implements OnInit {
   }
 
 
+
   nextpage(page){
     this.pagination.pageNumber = page 
     this.fetchListing()
@@ -99,17 +100,16 @@ export class AdminsComponent implements OnInit {
 
   editAction(record){
     this.formStatus = 'Update'
-    
+    this.isCollapsed = false;
     this.addEditForm.patchValue(record)  
     this.addEditForm.patchValue({id:record._id}) 
     this.addEditForm.patchValue({name:record.name}) 
     this.addEditForm.patchValue({email:record.email}) 
-    const password = this.addEditForm.controls.password;
-    const repassword = this.addEditForm.controls.repassword;
-    password.clearValidators(); 
-    repassword.clearValidators();
-    password.updateValueAndValidity();
-    repassword.updateValueAndValidity();
+    this.addEditForm.patchValue({password:'1234567890'}) 
+    this.addEditForm.patchValue({repassword:'1234567890'}) 
+    const password = this.addEditForm.get('password');
+    const repassword = this.addEditForm.get('repassword');
+    
     
     
   }
@@ -168,13 +168,15 @@ export class AdminsComponent implements OnInit {
   }
   onSubmit(){
     if (this.addEditForm.invalid) {     
-      this.isFormSubmitted= true
+        this.isFormSubmitted= true
       return false;      
     }
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
     this.utilsService.processPostRequest('/admin/addUpdateAdmin',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
+      
       this.cancelEdit()
+    //  this.isCollapsed = true; 
       this.fetchListing()
     })
   }

@@ -18,6 +18,7 @@ export const adminLteConf = {
     
     {label: 'User Listing', route: 'home/users', iconClasses: 'fa fa-user'},
     {label: 'Category Listing', route: 'home/category', iconClasses: 'fa fa-tasks'},
+    {label: 'Subcategory Listing', route: 'home/subcategory', iconClasses: 'fa fa-tasks'},
    /* {label: 'Skills Listing', route: 'home/neighbourhood', iconClasses: 'fa fa-users'},
     {label: 'Property Type Listing', route: 'home/property-type', iconClasses: 'fa fa-tasks'},*/
     {label: `FAQ's Listing`, route: 'home/faqs', iconClasses: 'fa fa-tasks'},

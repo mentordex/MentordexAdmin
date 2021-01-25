@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { Router, ActivatedRoute } from "@angular/router";
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 //services
@@ -11,23 +11,25 @@ import { environment } from '../../../environments/environment'
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
+  selector: 'app-subcategory',
+  templateUrl: './subcategory.component.html',
+  styleUrls: ['./subcategory.component.css']
 })
-export class CategoryComponent implements OnInit {
-
+export class SubcategoryComponent implements OnInit {
   destroy$: Subject<boolean> = new Subject<boolean>();
   isLoading:boolean = false;
   isCollapsed:boolean = true;
   formStatus:string = 'Add'
   records:any = []
+  cities:any =[]
   totalRecords = 0;
-  pagination:any = {
+  pagination:any = {    
+    city_id:'',
     search:'',
     size:10,
     pageNumber:1,   
   }
+  selectedCityId:any  ='';
   addEditForm: FormGroup;
   isFormSubmitted:boolean = false;
 
@@ -36,44 +38,38 @@ export class CategoryComponent implements OnInit {
 
   imageChangedEvent: any = '';
   croppedImage: any = '';
- 
-  constructor(private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder) { 
- 
-  }
 
- /*
-  fileChangeEvent(event: any): void { 
-
-    var files = event.target.files;
-    var file = files[0];
-   
-    if (files && file) {
-      console.log('yes');
-      var reader = new FileReader();
-      var that = this
-      reader.onload = function(e) {
-        // The file's text will be printed here
-        var binaryString = (e.target.result) as string;
-        that.addEditForm.patchValue({image:'data:image/svg+xml;base64,'+btoa(binaryString)})
-        console.log('form', that.addEditForm.value);
-      };
-      reader.onload =this._handleReaderLoaded.bind(this);
-
-      
-      
-    }
-
+  constructor(private activatedRoute:ActivatedRoute, private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder) { 
     
-
   }
 
-  _handleReaderLoaded(readerEvt) {
-    console.log('added');
-    var binaryString = readerEvt.target.result;
-    this.addEditForm.patchValue({image:'data:image/svg+xml;base64,'+btoa(binaryString)})
-    console.log('form', this.addEditForm.value);
-   }
-   */
+ 
+  ngOnInit(): void {
+    this.titleService.setTitle();
+
+    this.addEditForm=this.formBuilder.group({     
+      id:[null],
+      title: [null, [Validators.required]],    
+      city_id: ['', [Validators.required]],  
+      image:[] 
+    })
+
+    this.searchForm=this.formBuilder.group({    
+      search: [null, [Validators.required]],
+      city_id:['']
+    })
+    this.activatedRoute.params.subscribe((params) => {  
+      const cityID =  ('cityID' in params)?params['cityID']:''
+      this.selectedCityId =cityID
+      this.pagination['city_id'] = cityID
+      this.searchForm.patchValue({city_id:cityID})
+
+    })
+    this.fetchCities()
+    this.fetchListing() 
+    
+  }
+
   fileChangeEvent(event: any): void { 
     this.imageChangedEvent = event;
     
@@ -84,21 +80,34 @@ export class CategoryComponent implements OnInit {
      // console.log(this.croppedImage)
   }
 
-  ngOnInit(): void {
-    this.titleService.setTitle();
-    this.fetchListing() 
 
-    this.addEditForm=this.formBuilder.group({     
-      id:[null],
-      title: [null, [Validators.required]],
-      is_visible_on_home:[false],
-      image:[]
+  fetchCities(){
+    this.utilsService.processGetRequest('/city/listing').pipe(takeUntil(this.destroy$)).subscribe((response) => {
+     this.cities = response    
     })
+  }
 
-    this.searchForm=this.formBuilder.group({    
-      search: [null, [Validators.required]],
+  
+  onSelectCity(event){
+    this.selectedCityId = event.target.value
+    this.pagination['city_id'] = event.target.value
+    if(event.target.value)
+      this.searchForm.patchValue({city_id:event.target.value})
+    else
+      this.searchForm.patchValue({city_id:event.target.value})
+      
+    this.fetchListing(); 
+
+  }
+  fetchListing(){
+    this.utilsService.showPageLoader(environment.MESSAGES["FETCHING-RECORDS"]);//show page loader
+   
+    this.utilsService.processPostRequest('/admin/neighbourhoodListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      //console.log('response',response);
+      this.records = response['records'];     
+      this.totalRecords = response['total_records'];     
+      this.utilsService.hidePageLoader();//hide page loader
     })
-    
   }
 
   editAction(record){
@@ -106,25 +115,27 @@ export class CategoryComponent implements OnInit {
     this.isCollapsed = false;
     this.addEditForm.patchValue({ id: record._id})
     this.addEditForm.patchValue({ title: record.title})
+    this.addEditForm.patchValue({ city_id: record.city_id})
     this.addEditForm.patchValue({ image: record.image})
-    this.addEditForm.patchValue({ is_visible_on_home: record.is_visible_on_home})
 
     if((record.image).length>0)
       this.croppedImage = record.image
-
-    
   }
   cancelEdit(){
     this.addEditForm.reset();
-    this.isCollapsed = true;
+    this.addEditForm.patchValue({ city_id: ''})
+    this.addEditForm.patchValue({ image: ''})
     this.imageChangedEvent ='';
     this.croppedImage = ''
+    this.isCollapsed = true;    
     this.formStatus = 'Add'
   }
 
   resetSearch(){
     this.searchForm.reset();
-    this.pagination['search'] = ''
+    this.pagination['search'] = ''  
+    this.pagination['city_id'] = this.selectedCityId
+    this.searchForm.patchValue({city_id: this.selectedCityId})
     this.fetchListing()
   }
   
@@ -140,7 +151,7 @@ export class CategoryComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
-        this.utilsService.processPostRequest('/city/deleteCity',{id:record._id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+        this.utilsService.processPostRequest('/neighbourhood/deleteNeighborhood',{id:record._id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
           if(response){
             this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-DELETED']);          
             this.addEditForm.reset();
@@ -171,6 +182,7 @@ export class CategoryComponent implements OnInit {
       this.isFormSubmitted= true
       return false;      
     }
+    
     if(this.addEditForm.get('image').value == null){
       Swal.fire({
         icon: 'error',
@@ -180,7 +192,7 @@ export class CategoryComponent implements OnInit {
       return false;
     }
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
-    this.utilsService.processPostRequest('/city/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.utilsService.processPostRequest('/neighbourhood/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
       this.cancelEdit()
       this.fetchListing()
@@ -188,17 +200,7 @@ export class CategoryComponent implements OnInit {
   }
 
 
-  fetchListing(){
-    this.utilsService.showPageLoader(environment.MESSAGES["FETCHING-RECORDS"]);//show page loader
-   
-    this.utilsService.processPostRequest('/admin/cityListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      //console.log('response',response);
-      this.records = response['records'];     
-      this.totalRecords = response['total_records'];     
-      this.utilsService.hidePageLoader();//hide page loader
-    })
-  }
-
+ 
   nextpage(page){
     this.pagination.pageNumber = page 
     this.fetchListing()

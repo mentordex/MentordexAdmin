@@ -7,8 +7,8 @@
     <div style="width:23%" class="nav-tabs-custom">
       <ul class="nav nav-tabs">
         <li [ngClass]="{'active':selectedTab==''}"><a (click)="changeTab('')" href="javascript:void()">All</a></li>
-        <li [ngClass]="{'active':selectedTab=='AGENCY'}"><a (click)="changeTab('AGENCY')" href="#tab_2" href="javascript:void()">Parents</a></li>
-        <li [ngClass]="{'active':selectedTab=='AGENT'}"><a (click)="changeTab('AGENT')" href="#tab_3" href="javascript:void()">Mentors</a></li>
+        <li [ngClass]="{'active':selectedTab=='PARENT'}"><a (click)="changeTab('PARENT')" href="#tab_2" href="javascript:void()">Parents</a></li>
+        <li [ngClass]="{'active':selectedTab=='MENTOR'}"><a (click)="changeTab('MENTOR')" href="#tab_3" href="javascript:void()">Mentors</a></li>
       </ul>
     </div>
     <!--Ends Here-->
@@ -46,9 +46,7 @@
             <th></th>
             <th>Name</th>
             <th>Email</th>
-            <th>Role</th>
-            <th>Social Media</th>
-            <th>Properties/View</th>         
+            <th>Role</th>              
             <th>Status</th>
             <th>Created At</th>
             <th>Action</th>
@@ -60,27 +58,7 @@
        
             <td>{{record?.name}}</td>
             <td>{{record?.email}}</td>
-            <td>{{record?.role |  firstLetterCapital}}</td>          
-            <td>
-              <ul style="width: 100px;padding: 0;">
-                <li *ngIf="(record?.facebook!=null) && (record?.facebook).length>0" class="list-inline-item"><a target="_blank" href="{{record?.facebook}}"><i class="fa fa-facebook"></i></a></li>
-                <li *ngIf="(record?.twitter!=null) && (record?.twitter).length>0" class="list-inline-item"><a target="_blank" href="{{record?.twitter}}"><i class="fa fa-twitter"></i></a></li>
-                <li *ngIf="(record?.instagram!=null) && (record?.instagram).length>0" class="list-inline-item"><a target="_blank" href="{{record?.instagram}}"><i class="fa fa-instagram"></i></a></li>
-                <li *ngIf="(record?.pinterest!=null) && (record?.pinterest).length>0" class="list-inline-item"><a target="_blank" href="{{record?.pinterest}}"><i class="fa fa-pinterest"></i></a></li>
-                <li *ngIf="(record?.google_plus!=null) && (record?.google_plus).length>0" class="list-inline-item"><a target="_blank" href="{{record?.google_plus}}"><i class="fa fa-google"></i></a></li>
-              </ul>
-            </td>       
-            <td>
-             
-              <a *ngIf="record?.dashboard[0]['property_count']>0" routerLink="/home/property/{{record._id}}/no"><span class="badge bg-green">{{record?.dashboard[0]['property_count']}}</span></a>
-
-              <span *ngIf="record?.dashboard[0]['property_count']==0" class="badge bg-red">{{record?.dashboard[0]['property_count']}}</span>
-              /
-              <span *ngIf="record?.dashboard[0]['property_view_count']>0" class="badge bg-green">{{record?.dashboard[0]['property_view_count']}}</span>
-              <span *ngIf="record?.dashboard[0]['property_view_count']==0" class="badge bg-red">{{record?.dashboard[0]['property_view_count']}}</span>
-            </td>
-           
-
+            <td>{{record?.role |  firstLetterCapital}}</td>   
             <td>{{record?.is_active | firstLetterCapital}}</td>
             <td>{{record?.created_at | date:'MMM dd, y'}}</td>
             <td>

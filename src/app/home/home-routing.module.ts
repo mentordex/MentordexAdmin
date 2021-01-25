@@ -14,6 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { ViewPropertyComponent } from './view-property/view-property.component';
 import { OfficesComponent } from './offices/offices.component';
 import { TeamsComponent } from './teams/teams.component';
+import { SubcategoryComponent } from './subcategory/subcategory.component';
 
 const routes: Routes = [
   {
@@ -45,7 +46,12 @@ const routes: Routes = [
     path: 'category',
     component: CategoryComponent,   
     data: { title: 'Categories Listing' }
-  }, 
+  },
+  {
+    path: 'subcategory',
+    component: SubcategoryComponent,   
+    data: { title: 'Subcategory Listing' }
+  },
   {
     path: 'neighbourhood',
     component: NeighbourhoodComponent,   

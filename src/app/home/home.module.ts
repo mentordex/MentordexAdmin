@@ -17,10 +17,11 @@ import { ChangePasswordComponent } from './change-password/change-password.compo
 import { ViewPropertyComponent } from './view-property/view-property.component';
 import { OfficesComponent } from './offices/offices.component';
 import { TeamsComponent } from './teams/teams.component';
+import { SubcategoryComponent } from './subcategory/subcategory.component';
 
 
 @NgModule({
-  declarations: [AdminsComponent, UsersComponent, CategoryComponent, NeighbourhoodComponent, PropertyTypeComponent, PropertyComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, ViewPropertyComponent, OfficesComponent, TeamsComponent],
+  declarations: [AdminsComponent, UsersComponent, CategoryComponent, NeighbourhoodComponent, PropertyTypeComponent, PropertyComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, ViewPropertyComponent, OfficesComponent, TeamsComponent, SubcategoryComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,
