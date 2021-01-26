@@ -15,6 +15,7 @@ import { ViewPropertyComponent } from './view-property/view-property.component';
 import { OfficesComponent } from './offices/offices.component';
 import { TeamsComponent } from './teams/teams.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
+import { FaqCategoryComponent } from './faq-category/faq-category.component';
 
 const routes: Routes = [
   {
@@ -53,6 +54,12 @@ const routes: Routes = [
     data: { title: 'Subcategory Listing' }
   },
   {
+    path: 'subcategory/:categoryID',
+    component: SubcategoryComponent,   
+    data: { title: 'Subcategory Listing' }
+  },
+
+  {
     path: 'neighbourhood',
     component: NeighbourhoodComponent,   
     data: { title: 'Neighbourhoods Listing' }
@@ -83,6 +90,12 @@ const routes: Routes = [
     component: AmenityComponent,   
     data: { title: 'FAQ Listing' }
   },
+  {
+    path: 'faq-category',
+    component: FaqCategoryComponent,   
+    data: { title: 'FAQ Category' }
+  },
+  
   {
     path: 'profile',
     component: ProfileComponent,   

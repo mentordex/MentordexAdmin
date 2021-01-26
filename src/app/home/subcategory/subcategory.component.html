@@ -10,7 +10,7 @@
         <div class="box-body">          
         <div class="form-group">
             <label>Title*</label>
-            <input formControlName="title" class="form-control" type="text" placeholder="Neighbourhood Title">  
+            <input formControlName="title" class="form-control" type="text" placeholder="Subcategory Title">  
             <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
                 <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
             </p>  
@@ -21,18 +21,18 @@
     
           <div  class="form-group">
             <label>Category*</label>
-            <select formControlName="city_id" class="form-control">
+            <select formControlName="category_id" class="form-control">
               <option value="">Select Category</option>
-              <option *ngFor="let city of cities" value="{{city._id}}">{{city.title}}</option>
+              <option *ngFor="let category of categories" value="{{category._id}}">{{category.title}}</option>
             </select>
-            <p class="errorCls"  *ngIf="addEditForm.controls.city_id.touched || isFormSubmitted">
-              <app-form-validation-errors errorPrefix="City " [errors]="addEditForm.get('city_id').errors"></app-form-validation-errors>
+            <p class="errorCls"  *ngIf="addEditForm.controls.category_id.touched || isFormSubmitted">
+              <app-form-validation-errors errorPrefix="Category " [errors]="addEditForm.get('category_id').errors"></app-form-validation-errors>
           </p> 
           </div>    
   
           <div class="form-group">
             <input type="file" (change)="fileChangeEvent($event)" />  
-            <p class="text-center" *ngIf="croppedImage.length>0">Please Crop Image:</p>
+            <p class="text-center" *ngIf="croppedImage.length>0 && imageChangedEvent.length>0">Please Crop Image:</p>
             <image-cropper
                 [imageChangedEvent]="imageChangedEvent"
                 [maintainAspectRatio]="true"
@@ -70,9 +70,9 @@
   
         <div class="listing-view">
           <div  class="form-group">    
-            <select formControlName="city_id" (change)="onSelectCity($event)" class="form-control">
+            <select formControlName="category_id" (change)="onSelectCategory($event)" class="form-control">
               <option value="">Filter By  Category</option>
-              <option *ngFor="let city of cities" value="{{city._id}}">{{city.title}}</option>
+              <option *ngFor="let category of categories" value="{{category._id}}">{{category.title}}</option>
             </select>
           </div>
   
@@ -105,7 +105,7 @@
         <thead>
             <tr>
               <th></th>
-              <th>Title</th>
+              <th>Subcategory</th>
               <th>Category</th>          
               <th>created At</th>
               <th>Action</th>
@@ -116,7 +116,7 @@
               <td scope="row"><img class="listing-img" src="{{record?.image}}" onerror="this.src='/assets/img/avatar.png'"></td>
          
               <td>{{record?.title}}</td>
-              <td>{{record?.city[0]['title']}}</td>          
+              <td>{{record?.category[0]?.title}}</td>          
               <td>{{record?.created_at | date:'MMM dd, y'}}</td>
               <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>
             </tr>          

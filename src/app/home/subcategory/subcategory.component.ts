@@ -21,15 +21,15 @@ export class SubcategoryComponent implements OnInit {
   isCollapsed:boolean = true;
   formStatus:string = 'Add'
   records:any = []
-  cities:any =[]
+  categories:any =[]
   totalRecords = 0;
   pagination:any = {    
-    city_id:'',
+    category_id:'',
     search:'',
     size:10,
     pageNumber:1,   
   }
-  selectedCityId:any  ='';
+  selectedCategoryId:any  ='';
   addEditForm: FormGroup;
   isFormSubmitted:boolean = false;
 
@@ -50,22 +50,22 @@ export class SubcategoryComponent implements OnInit {
     this.addEditForm=this.formBuilder.group({     
       id:[null],
       title: [null, [Validators.required]],    
-      city_id: ['', [Validators.required]],  
+      category_id: ['', [Validators.required]],  
       image:[] 
     })
 
     this.searchForm=this.formBuilder.group({    
       search: [null, [Validators.required]],
-      city_id:['']
+      category_id:['']
     })
     this.activatedRoute.params.subscribe((params) => {  
-      const cityID =  ('cityID' in params)?params['cityID']:''
-      this.selectedCityId =cityID
-      this.pagination['city_id'] = cityID
-      this.searchForm.patchValue({city_id:cityID})
+      const categoryID =  ('categoryID' in params)?params['categoryID']:''
+      this.selectedCategoryId =categoryID
+      this.pagination['category_id'] = categoryID
+      this.searchForm.patchValue({category_id:categoryID})
 
     })
-    this.fetchCities()
+    this.fetchCategories()
     this.fetchListing() 
     
   }
@@ -81,20 +81,20 @@ export class SubcategoryComponent implements OnInit {
   }
 
 
-  fetchCities(){
-    this.utilsService.processGetRequest('/city/listing').pipe(takeUntil(this.destroy$)).subscribe((response) => {
-     this.cities = response    
+  fetchCategories(){
+    this.utilsService.processGetRequest('/category/listing').pipe(takeUntil(this.destroy$)).subscribe((response) => {
+     this.categories = response    
     })
   }
 
   
-  onSelectCity(event){
-    this.selectedCityId = event.target.value
-    this.pagination['city_id'] = event.target.value
+  onSelectCategory(event){
+    this.selectedCategoryId = event.target.value
+    this.pagination['category_id'] = event.target.value
     if(event.target.value)
-      this.searchForm.patchValue({city_id:event.target.value})
+      this.searchForm.patchValue({category_id:event.target.value})
     else
-      this.searchForm.patchValue({city_id:event.target.value})
+      this.searchForm.patchValue({category_id:event.target.value})
       
     this.fetchListing(); 
 
@@ -102,7 +102,7 @@ export class SubcategoryComponent implements OnInit {
   fetchListing(){
     this.utilsService.showPageLoader(environment.MESSAGES["FETCHING-RECORDS"]);//show page loader
    
-    this.utilsService.processPostRequest('/admin/neighbourhoodListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.utilsService.processPostRequest('/admin/subcategoryListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       //console.log('response',response);
       this.records = response['records'];     
       this.totalRecords = response['total_records'];     
@@ -115,7 +115,7 @@ export class SubcategoryComponent implements OnInit {
     this.isCollapsed = false;
     this.addEditForm.patchValue({ id: record._id})
     this.addEditForm.patchValue({ title: record.title})
-    this.addEditForm.patchValue({ city_id: record.city_id})
+    this.addEditForm.patchValue({ category_id: record.category_id})
     this.addEditForm.patchValue({ image: record.image})
 
     if((record.image).length>0)
@@ -123,7 +123,7 @@ export class SubcategoryComponent implements OnInit {
   }
   cancelEdit(){
     this.addEditForm.reset();
-    this.addEditForm.patchValue({ city_id: ''})
+    this.addEditForm.patchValue({ category_id: ''})
     this.addEditForm.patchValue({ image: ''})
     this.imageChangedEvent ='';
     this.croppedImage = ''
@@ -134,8 +134,8 @@ export class SubcategoryComponent implements OnInit {
   resetSearch(){
     this.searchForm.reset();
     this.pagination['search'] = ''  
-    this.pagination['city_id'] = this.selectedCityId
-    this.searchForm.patchValue({city_id: this.selectedCityId})
+    this.pagination['category_id'] = this.selectedCategoryId
+    this.searchForm.patchValue({category_id: this.selectedCategoryId})
     this.fetchListing()
   }
   
@@ -151,7 +151,7 @@ export class SubcategoryComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
-        this.utilsService.processPostRequest('/neighbourhood/deleteNeighborhood',{id:record._id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+        this.utilsService.processPostRequest('/subcategory/deleteSubcategory',{id:record._id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
           if(response){
             this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-DELETED']);          
             this.addEditForm.reset();
@@ -192,7 +192,7 @@ export class SubcategoryComponent implements OnInit {
       return false;
     }
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
-    this.utilsService.processPostRequest('/neighbourhood/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.utilsService.processPostRequest('/subcategory/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
       this.cancelEdit()
       this.fetchListing()

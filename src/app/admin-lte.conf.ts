@@ -21,6 +21,7 @@ export const adminLteConf = {
     {label: 'Subcategory Listing', route: 'home/subcategory', iconClasses: 'fa fa-tasks'},
    /* {label: 'Skills Listing', route: 'home/neighbourhood', iconClasses: 'fa fa-users'},
     {label: 'Property Type Listing', route: 'home/property-type', iconClasses: 'fa fa-tasks'},*/
+    {label: `FAQ's Category`, route: 'home/faq-category', iconClasses: 'fa fa-tasks'},
     {label: `FAQ's Listing`, route: 'home/faqs', iconClasses: 'fa fa-tasks'},
     {label: `Offices Listing`, route: 'home/offices', iconClasses: 'fa fa-tasks'},
     {label: `Team Listing`, route: 'home/team', iconClasses: 'fa fa-tasks'},

@@ -21,7 +21,7 @@
         
         <div class="form-group">
             <input type="file" (change)="fileChangeEvent($event)" />  
-            <p class="text-center" *ngIf="croppedImage.length>0">Please Crop Image:</p>
+            <p class="text-center" *ngIf="croppedImage.length>0 && imageChangedEvent.length>0">Please Crop Image:</p>
             <image-cropper
                 [imageChangedEvent]="imageChangedEvent"
                 [maintainAspectRatio]="true"

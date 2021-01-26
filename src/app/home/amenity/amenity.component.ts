@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 
 //services
 import { TitleService, UtilsService } from '../../core/services'
@@ -22,6 +22,8 @@ export class AmenityComponent implements OnInit {
   formStatus:string = 'Add'
   records:any = []
   totalRecords = 0;
+  categories:any = []
+
   pagination:any = {
     search:'',
     size:10,
@@ -32,28 +34,56 @@ export class AmenityComponent implements OnInit {
 
   searchForm: FormGroup;
   isSearchFormSubmitted:boolean = false;
-  
+  selectedCategoryId:any  ='';
 
-  constructor(private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder, private router:Router) { 
- 
+  constructor(private activatedRoute:ActivatedRoute, private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder, private router:Router) { 
+    this.fetchCategory();
   }
 
  
   ngOnInit(): void {
-    this.titleService.setTitle();
+    this.titleService.setTitle();    
     this.fetchListing() 
+
 
     this.amenityForm=this.formBuilder.group({     
       id:[null],
       type: [null, [Validators.required]],
       description:[null,[Validators.required]],
-      category:['', [Validators.required]]
+      category_id:['', [Validators.required]],
+      is_active:['No', [Validators.required]], 
+    })
+
+    this.activatedRoute.params.subscribe((params) => {  
+      const categoryID =  ('categoryID' in params)?params['categoryID']:''
+      this.selectedCategoryId =categoryID
+      this.pagination['category_id'] = categoryID
+      this.searchForm.patchValue({category_id:categoryID})
+
     })
 
     this.searchForm=this.formBuilder.group({    
       search: [null, [Validators.required]],
+      category_id:['']
     })
     
+  }
+  onSelectCategory(event){
+    this.selectedCategoryId = event.target.value
+    this.pagination['category_id'] = event.target.value
+    if(event.target.value)
+      this.searchForm.patchValue({category_id:event.target.value})
+    else
+      this.searchForm.patchValue({category_id:event.target.value})
+      
+    this.fetchListing(); 
+
+  }
+
+  fetchCategory(){
+    this.utilsService.processGetRequest('/faqcategory/listing').pipe(takeUntil(this.destroy$)).subscribe((response) => {
+     this.categories = response    
+    })
   }
 
   editAction(record){
@@ -61,7 +91,9 @@ export class AmenityComponent implements OnInit {
     this.amenityForm.patchValue({ id: record._id})
     this.amenityForm.patchValue({ type: record.type})
     this.amenityForm.patchValue({ description: record.description})
-    this.amenityForm.patchValue({ category: record.category})
+    this.amenityForm.patchValue({ category_id: record.category_id})
+    this.amenityForm.patchValue({ is_active: record.is_active})
+    
     this.formStatus = 'Update'
     this.isCollapsed = false;
   }

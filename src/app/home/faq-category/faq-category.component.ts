@@ -11,11 +11,11 @@ import { environment } from '../../../environments/environment'
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-category',
-  templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
+  selector: 'app-faq-category',
+  templateUrl: './faq-category.component.html',
+  styleUrls: ['./faq-category.component.css']
 })
-export class CategoryComponent implements OnInit {
+export class FaqCategoryComponent implements OnInit {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   isLoading:boolean = false;
@@ -34,55 +34,12 @@ export class CategoryComponent implements OnInit {
   searchForm: FormGroup;
   isSearchFormSubmitted:boolean = false;
 
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
  
   constructor(private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder) { 
  
   }
 
- /*
-  fileChangeEvent(event: any): void { 
-
-    var files = event.target.files;
-    var file = files[0];
-   
-    if (files && file) {
-      console.log('yes');
-      var reader = new FileReader();
-      var that = this
-      reader.onload = function(e) {
-        // The file's text will be printed here
-        var binaryString = (e.target.result) as string;
-        that.addEditForm.patchValue({image:'data:image/svg+xml;base64,'+btoa(binaryString)})
-        console.log('form', that.addEditForm.value);
-      };
-      reader.onload =this._handleReaderLoaded.bind(this);
-
-      
-      
-    }
-
-    
-
-  }
-
-  _handleReaderLoaded(readerEvt) {
-    console.log('added');
-    var binaryString = readerEvt.target.result;
-    this.addEditForm.patchValue({image:'data:image/svg+xml;base64,'+btoa(binaryString)})
-    console.log('form', this.addEditForm.value);
-   }
-   */
-  fileChangeEvent(event: any): void { 
-    this.imageChangedEvent = event;
-    
-  }
-  imageCropped(event: ImageCroppedEvent) {
-      this.croppedImage = event.base64;
-      this.addEditForm.patchValue({image:this.croppedImage})
-     // console.log(this.croppedImage)
-  }
+ 
 
   ngOnInit(): void {
     this.titleService.setTitle();
@@ -91,8 +48,7 @@ export class CategoryComponent implements OnInit {
     this.addEditForm=this.formBuilder.group({     
       id:[null],
       title: [null, [Validators.required]],
-      is_visible_on_home:[false],
-      image:[]
+      is_active:['No', [Validators.required]],   
     })
 
     this.searchForm=this.formBuilder.group({    
@@ -105,20 +61,13 @@ export class CategoryComponent implements OnInit {
     this.formStatus = 'Update'
     this.isCollapsed = false;
     this.addEditForm.patchValue({ id: record._id})
-    this.addEditForm.patchValue({ title: record.title})
-    this.addEditForm.patchValue({ image: record.image})
-    this.addEditForm.patchValue({ is_visible_on_home: record.is_visible_on_home})
-
-    if((record.image).length>0)
-      this.croppedImage = record.image
-
-    
+    this.addEditForm.patchValue({ title: record.title}) 
+    this.addEditForm.patchValue({ is_active: record.is_active})  
   }
+
   cancelEdit(){
     this.addEditForm.reset();
-    this.isCollapsed = true;
-    this.imageChangedEvent ='';
-    this.croppedImage = ''
+    this.isCollapsed = true;   
     this.formStatus = 'Add'
   }
 
@@ -132,7 +81,7 @@ export class CategoryComponent implements OnInit {
     //console.log(record)
     Swal.fire({
       title: 'Are you sure?',
-      text: 'All related subcategories will be deleted. You will not be able to recover this record!',
+      text: 'All related FAQs will be deleted. You will not be able to recover this record!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
@@ -140,7 +89,7 @@ export class CategoryComponent implements OnInit {
     }).then((result) => {
       if (result.value) {
         this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
-        this.utilsService.processPostRequest('/category/deleteCategory',{id:record._id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+        this.utilsService.processPostRequest('/faqcategory/deleteCategory',{id:record._id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
           if(response){
             this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-DELETED']);          
             this.addEditForm.reset();
@@ -171,16 +120,9 @@ export class CategoryComponent implements OnInit {
       this.isFormSubmitted= true
       return false;      
     }
-    if(this.addEditForm.get('image').value == null){
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Please add an image'        
-      })
-      return false;
-    }
+    
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
-    this.utilsService.processPostRequest('/category/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.utilsService.processPostRequest('/faqcategory/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
       this.cancelEdit()
       this.fetchListing()
@@ -191,7 +133,7 @@ export class CategoryComponent implements OnInit {
   fetchListing(){
     this.utilsService.showPageLoader(environment.MESSAGES["FETCHING-RECORDS"]);//show page loader
    
-    this.utilsService.processPostRequest('/admin/categoryListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.utilsService.processPostRequest('/admin/faqcategoryListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       //console.log('response',response);
       this.records = response['records'];     
       this.totalRecords = response['total_records'];     
