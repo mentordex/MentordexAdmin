@@ -31,7 +31,8 @@
               "node_modules/admin-lte-css/dist/css/AdminLTE.css",
               "node_modules/admin-lte-css/dist/css/skins/_all-skins.css",
               "src/styles.css",
-              "src/assets/css/developer.css"
+              "src/assets/css/developer.css",
+              "src/assets/css/css-loader.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",

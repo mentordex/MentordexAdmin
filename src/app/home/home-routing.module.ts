@@ -16,6 +16,9 @@ import { OfficesComponent } from './offices/offices.component';
 import { TeamsComponent } from './teams/teams.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
 import { FaqCategoryComponent } from './faq-category/faq-category.component';
+import { CountryComponent } from './location/country/country.component';
+import { StateComponent } from './location/state/state.component';
+import { CityComponent } from './location/city/city.component';
 
 const routes: Routes = [
   {
@@ -116,6 +119,21 @@ const routes: Routes = [
     component: TeamsComponent,   
     data: { title: 'Our Team' }
   },
+  {
+    path: 'country',
+    component: CountryComponent,   
+    data: { title: 'Country List' }
+  },
+  {
+    path: 'state',
+    component: StateComponent,   
+    data: { title: 'State List' }
+  },
+  {
+    path: 'city',
+    component: CityComponent,   
+    data: { title: 'City List' }
+  }
   
 
   

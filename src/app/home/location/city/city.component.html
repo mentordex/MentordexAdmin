@@ -1,0 +1,165 @@
+<mk-box header="{{formStatus}} City" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
+   
+      
+  <a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
+      <i class="fa fa-repeat"></i> Reset
+  </a>
+  
+  <!-- Add/Update Record-->
+  <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
+      <div class="box-body">          
+      <div class="form-group">
+          <label>Title*</label>
+          <input formControlName="title" class="form-control" type="text" placeholder="City Title">  
+          <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
+              <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
+          </p>  
+      </div> 
+      <app-image-upload-dropzone (onImageUploadSuccess)="updateForm($event)"></app-image-upload-dropzone>
+    
+      <div *ngIf="addEditForm.controls.image.value"><img style="width:100px" src="{{addEditForm.controls.image.value}}"></div>
+      <div  class="form-group">
+        <label>Zipcodes*</label>
+        <tag-input formControlName="zipcodes"  (onRemove)="onZipcodeRemoved($event)" (onAdd)="onAddZipcode($event)" [modelAsStrings]="true" [secondaryPlaceholder]="'Enter zipcode'" [placeholder]="'Enter More+'"></tag-input>
+      </div>
+      
+     
+       
+  
+        <div  class="form-group">
+          <label>Country*</label>
+          <select (change)="fetchStates($event)" formControlName="country_id" class="form-control">
+            <option value="">Select Country</option>
+            <option *ngFor="let country of countries" value="{{country._id}}">{{country.title}}</option>
+          </select>
+          <p class="errorCls"  *ngIf="addEditForm.controls.country_id.touched || isFormSubmitted">
+            <app-form-validation-errors errorPrefix="Country " [errors]="addEditForm.get('country_id').errors"></app-form-validation-errors>
+        </p> 
+        </div>  
+        <div  class="form-group">
+          <label>State*</label>
+          <select formControlName="state_id" class="form-control">
+            <option value="">Select State</option>
+            <option *ngFor="let state of states" value="{{state._id}}">{{state.title}}</option>
+          </select>
+          <p class="errorCls"  *ngIf="addEditForm.controls.state_id.touched || isFormSubmitted">
+            <app-form-validation-errors errorPrefix="State " [errors]="addEditForm.get('state_id').errors"></app-form-validation-errors>
+          </p> 
+        </div>        
+        
+
+        <div  class="form-group">
+          <label>Is Active*</label>
+          <select formControlName="is_active" class="form-control">                 
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+            
+          </select>
+          <p class="errorCls"  *ngIf="addEditForm.controls.is_active.touched || isFormSubmitted">
+            <app-form-validation-errors errorPrefix="Status " [errors]="addEditForm.get('is_active').errors"></app-form-validation-errors>
+          </p> 
+        </div>
+       
+       
+   
+          
+      </div>
+      <!-- /.box-body -->
+
+      <div class="box-footer">     
+      <button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button type="submit" class="btn btn-primary">{{formStatus}}</button>
+      </div>
+  </form>
+  <!-- End Here-->
+
+</mk-box>
+
+<mk-box [isLoading]="isLoading"  [isCollapsable]="false" [isRemovable]="false">
+  <div class="box-header">
+    <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
+      <div style="width:50%">
+        <h3 class="box-title">City Listing</h3>     
+        
+      </div>
+
+      <div class="listing-view">
+        <div  class="form-group">    
+          <select formControlName="country_id" (change)="onSelectCountry($event)" class="form-control">
+            <option value="">Filter By  Country</option>
+            <option *ngFor="let country of countries" value="{{country._id}}">{{country.title}}</option>
+          </select>
+        </div>
+        <div  class="form-group">    
+          <select formControlName="country_id" (change)="onSelectstate($event)" class="form-control">
+            <option value="">Filter By  State</option>
+            <option *ngFor="let state of states2" value="{{state._id}}">{{state.title}}</option>
+          </select>
+        </div>
+
+        <div class="box-tools search_box">        
+          <div class="input-group input-group-sm hidden-xs" style="width: 250px;">
+              <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Title">
+              <p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
+                  <app-form-validation-errors errorPrefix="Title " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
+              </p>
+              <div class="input-group-btn">
+              <button type="submit" class="btn btn-default search_btn"><i class="fa fa-search"></i></button>
+              </div>
+          </div>
+                
+        </div>
+      </div>
+
+    
+      
+    </form> 
+    <a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
+        <i title="Reset Search" class="fa fa-repeat"></i> 
+    </a> 
+    
+</div>
+<!-- /.box-header -->
+
+<div class="box-body table-responsive no-padding">
+  <table class="table table-hover">
+      <thead>
+          <tr>   
+            <th></th> 
+            <th>City</th> 
+            <th>Zipcodes</th>        
+            <th>State</th>
+            <th>Country</th>          
+            <th>Active</th> 
+            <th>created At</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="records.length>0" >
+          <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: pagination.size, currentPage: pagination.pageNumber, totalItems: totalRecords }">
+            <td scope="row"><img class="listing-img" src="{{record?.image}}" onerror="this.src='assets/img/avatar.png'"></td>
+            <td>{{record?.title}}</td> 
+            <td>
+              <span style="background-color: #3233; border-radius: 20px;width: 45%;" *ngFor="let zipcode of record.zipcodes">{{zipcode.value}} </span>
+          
+
+            </td>
+            <td>{{record?.state[0]?.title}}</td>
+            <td>{{record?.country[0]?.title}}</td> 
+            <td>{{(record?.is_active)?'Yes':'No'}}</td>            
+            <td>{{record?.created_at | date:'MMM dd, y'}}</td>
+            <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>
+          </tr>          
+        </tbody>
+        <tbody *ngIf="records.length<=0" >
+          <tr>
+            <td style="text-align:center;" colspan="5">No Record Found.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      <pagination-controls style="text-align:right"  id="listing"  (pageChange)="nextpage($event)"></pagination-controls>
+      
+  
+    
+  </mk-box>

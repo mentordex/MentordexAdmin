@@ -1,0 +1,13 @@
+
+.dz-preview{
+    display: none;
+}
+.dz-preview .dz-details{
+    display: none;
+}
+.dz-preview .dz-success-mark{
+    display: none;
+}
+.dz-preview .dz-error-mark{
+    display: none;
+}

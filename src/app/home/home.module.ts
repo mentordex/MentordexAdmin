@@ -19,10 +19,14 @@ import { OfficesComponent } from './offices/offices.component';
 import { TeamsComponent } from './teams/teams.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
 import { FaqCategoryComponent } from './faq-category/faq-category.component';
+import { CountryComponent } from './location/country/country.component';
+import { StateComponent } from './location/state/state.component';
+import { CityComponent } from './location/city/city.component';
+import { ImageUploadDropzoneComponent } from './image-upload-dropzone/image-upload-dropzone.component';
 
 
 @NgModule({
-  declarations: [AdminsComponent, UsersComponent, CategoryComponent, NeighbourhoodComponent, PropertyTypeComponent, PropertyComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, ViewPropertyComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent],
+  declarations: [AdminsComponent, UsersComponent, CategoryComponent, NeighbourhoodComponent, PropertyTypeComponent, PropertyComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, ViewPropertyComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent, CountryComponent, StateComponent, CityComponent, ImageUploadDropzoneComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

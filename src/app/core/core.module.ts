@@ -8,6 +8,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { DropzoneModule, DROPZONE_CONFIG, DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
+import { TagInputModule } from 'ngx-chips';
 
 import { HeaderInnerComponent } from './components/header-inner/header-inner.component';
 import { SidebarLeftInnerComponent } from './components/sidebar-left-inner/sidebar-left-inner.component';
@@ -32,8 +34,10 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     NgxPaginationModule,
     ImageCropperModule,
     NgxMaskModule.forRoot(),
+    DropzoneModule,
+    TagInputModule
   ],
   declarations: [HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe],
-  exports: [ ImageCropperModule, NgxPaginationModule, NgxDatatableModule, ToastrModule, BoxModule, TabsModule, HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, NgxMaskModule]
+  exports: [ ImageCropperModule, NgxPaginationModule, NgxDatatableModule, ToastrModule, BoxModule, TabsModule, HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, NgxMaskModule, DropzoneModule, TagInputModule]
 })
 export class CoreModule { }
