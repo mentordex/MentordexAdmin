@@ -10,9 +10,9 @@
         <div class="box-body">          
           <div class="form-group">
               <label>Title*</label>
-              <input formControlName="title" class="form-control" type="text" placeholder="Country Title">  
+              <input formControlName="title" class="form-control" type="text" placeholder="Country Name">  
               <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
-                  <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
+                  <app-form-validation-errors errorPrefix="Country Name " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
               </p>          
           </div>
           <div  class="form-group">

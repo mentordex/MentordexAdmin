@@ -41,7 +41,7 @@ export class ImageUploadDropzoneComponent implements OnInit {
       cancelReset: null,
       //acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div><p>Drag and drop image here</p></div>', 
+      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div><p>Upload Image</p></div>', 
      // previewsContainer: "#vehicleImagesPreview",        
       addRemoveLinks: false,
       //createImageThumbnails:false,

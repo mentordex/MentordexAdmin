@@ -10,9 +10,9 @@
       <div class="box-body">          
       <div class="form-group">
           <label>Title*</label>
-          <input formControlName="title" class="form-control" type="text" placeholder="City Title">  
+          <input formControlName="title" class="form-control" type="text" placeholder="Enter City Name">  
           <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
-              <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
+              <app-form-validation-errors errorPrefix="City Name " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
           </p>  
       </div> 
       <app-image-upload-dropzone (onImageUploadSuccess)="updateForm($event)"></app-image-upload-dropzone>
@@ -21,6 +21,7 @@
       <div  class="form-group">
         <label>Zipcodes*</label>
         <tag-input formControlName="zipcodes"  (onRemove)="onZipcodeRemoved($event)" (onAdd)="onAddZipcode($event)" [modelAsStrings]="true" [secondaryPlaceholder]="'Enter zipcode'" [placeholder]="'Enter More+'"></tag-input>
+        <i>Press ENTER to add multiple zipcode.</i>
       </div>
       
      
