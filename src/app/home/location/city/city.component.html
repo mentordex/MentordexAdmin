@@ -9,19 +9,19 @@
   <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
       <div class="box-body">          
       <div class="form-group">
-          <label>Title*</label>
-          <input formControlName="title" class="form-control" type="text" placeholder="Enter City Name">  
+          <label>City Name*</label>
+          <input formControlName="title" class="form-control" type="text" placeholder="Enter a city name">  
           <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
-              <app-form-validation-errors errorPrefix="City Name " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
+              <app-form-validation-errors errorPrefix="City name " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
           </p>  
       </div> 
       <app-image-upload-dropzone (onImageUploadSuccess)="updateForm($event)"></app-image-upload-dropzone>
     
       <div *ngIf="addEditForm.controls.image.value"><img style="width:100px" src="{{addEditForm.controls.image.value}}"></div>
       <div  class="form-group">
-        <label>Zipcodes*</label>
-        <tag-input formControlName="zipcodes"  (onRemove)="onZipcodeRemoved($event)" (onAdd)="onAddZipcode($event)" [modelAsStrings]="true" [secondaryPlaceholder]="'Enter zipcode'" [placeholder]="'Enter More+'"></tag-input>
-        <i>Press ENTER to add multiple zipcode.</i>
+        <label>Zip codes*</label>
+        <tag-input formControlName="zipcodes"  (onRemove)="onZipcodeRemoved($event)" (onAdd)="onAddZipcode($event)" [modelAsStrings]="true" [secondaryPlaceholder]="'Enter the zip code. Only 1 zip code is required.'" [placeholder]="'Enter More+'"></tag-input>
+        <i>Press ENTER to add multiple zip code.</i>
       </div>
       
      
@@ -50,7 +50,7 @@
         
 
         <div  class="form-group">
-          <label>Is Active*</label>
+          <label>Status*</label>
           <select formControlName="is_active" class="form-control">                 
             <option value="true">Yes</option>
             <option value="false">No</option>
@@ -85,25 +85,25 @@
       </div>
 
       <div class="listing-view">
-        <div  class="form-group">    
+        <!--<div  class="form-group">    
           <select formControlName="country_id" (change)="onSelectCountry($event)" class="form-control">
-            <option value="">Filter By  Country</option>
+            <option value="">Sort by country</option>
             <option *ngFor="let country of countries" value="{{country._id}}">{{country.title}}</option>
           </select>
-        </div>
+        </div>-->
         <div  class="form-group">    
-          <select formControlName="country_id" (change)="onSelectstate($event)" class="form-control">
-            <option value="">Filter By  State</option>
+          <select formControlName="state_id" (change)="onSelectstate($event)" class="form-control">
+            <option value="">Sort by  State</option>
             <option *ngFor="let state of states2" value="{{state._id}}">{{state.title}}</option>
           </select>
         </div>
 
         <div class="box-tools search_box">        
           <div class="input-group input-group-sm hidden-xs" style="width: 250px;">
-              <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Title">
-              <p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
+              <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search by city Name">
+              <!--<p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
                   <app-form-validation-errors errorPrefix="Title " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
-              </p>
+              </p>-->
               <div class="input-group-btn">
               <button type="submit" class="btn btn-default search_btn"><i class="fa fa-search"></i></button>
               </div>
@@ -126,13 +126,12 @@
   <table class="table table-hover">
       <thead>
           <tr>   
-            <th></th> 
+            <th>Image</th>              
             <th>City</th> 
-            <th>Zipcodes</th>        
-            <th>State</th>
-            <th>Country</th>          
-            <th>Active</th> 
-            <th>created At</th>
+            <th>Status</th>
+            <th>Created On</th>
+            <th>Updated On</th>
+            <th>Zip Code</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -140,21 +139,21 @@
           <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: pagination.size, currentPage: pagination.pageNumber, totalItems: totalRecords }">
             <td scope="row"><img class="listing-img" src="{{record?.image}}" onerror="this.src='assets/img/avatar.png'"></td>
             <td>{{record?.title}}</td> 
-            <td>
-              <span style="background-color: #3233; border-radius: 20px;width: 45%;" *ngFor="let zipcode of record.zipcodes">{{zipcode.value}} </span>
-          
-
-            </td>
-            <td>{{record?.state[0]?.title}}</td>
-            <td>{{record?.country[0]?.title}}</td> 
-            <td>{{(record?.is_active)?'Yes':'No'}}</td>            
-            <td>{{record?.created_at | date:'MMM dd, y'}}</td>
+            <td>{{(record?.is_active)?'Active':'Inactive'}}</td>
+            <td>{{record?.created_at | date:'MMM dd, y h:mm:ss a'}}</td>
+              <td>{{record?.modified_at | date:'MMM dd, y h:mm:ss a'}}</td>
+            
+              <td>
+                <span style="background-color: #3233; border-radius: 20px;width: 45%;" *ngFor="let zipcode of record.zipcodes">{{zipcode.value}} </span>
+            
+  
+              </td>
             <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>
           </tr>          
         </tbody>
         <tbody *ngIf="records.length<=0" >
           <tr>
-            <td style="text-align:center;" colspan="5">No Record Found.</td>
+            <td style="text-align:center;" colspan="5">We can't find any record.</td>
           </tr>
         </tbody>
       </table>

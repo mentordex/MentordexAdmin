@@ -9,14 +9,14 @@
     <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
         <div class="box-body">          
           <div class="form-group">
-              <label>Title*</label>
-              <input formControlName="title" class="form-control" type="text" placeholder="Country Name">  
+              <label>Country Name*</label>
+              <input formControlName="title" class="form-control" type="text" placeholder="Enter a country name">  
               <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
-                  <app-form-validation-errors errorPrefix="Country Name " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
+                  <app-form-validation-errors errorPrefix="Country name " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
               </p>          
           </div>
           <div  class="form-group">
-            <label>Is Active*</label>
+            <label>Status*</label>
             <select formControlName="is_active" class="form-control">                 
               <option value="true">Yes</option>
               <option value="false">No</option>
@@ -48,11 +48,11 @@
           <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
               <div class="input-group input-group-sm hidden-xs" style="width: 250px;">
   
-                  <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Title">
+                  <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search by Country Name">
   
-                  <p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
+                  <!--<p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
                       <app-form-validation-errors errorPrefix="Title " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
-                  </p>
+                  </p>-->
                   <div class="input-group-btn">
                   <button type="submit" class="btn btn-default search_btn"><i class="fa fa-search"></i></button>
                   </div>
@@ -70,9 +70,11 @@
       <table class="table table-hover">
           <thead>
             <tr>
-              <th>Title</th>  
-              <th>Active</th>         
-              <th>created At</th>
+              <th>Country</th>  
+              <th>Status</th>         
+              <th>Created On</th>
+              <th>Updated On</th>
+              <th>State</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -80,15 +82,16 @@
             <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: 10, currentPage: pagination.pageNumber, totalItems: totalRecords }">
                    
               <td>{{record?.title}}</td>
-              <td>{{(record?.is_active)?'Yes':'No'}}</td>            
-              
-              <td>{{record?.created_at | date:'MMM dd, y'}}</td>
+              <td>{{(record?.is_active)?'Active':'Inactive'}}</td>
+              <td>{{record?.created_at | date:'MMM dd, y h:mm:ss a'}}</td>
+              <td>{{record?.modified_at | date:'MMM dd, y h:mm:ss a'}}</td>
+              <td><a routerLink="/home/state/{{record?._id}}">View</a></td>
               <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>
             </tr>          
           </tbody>
           <tbody *ngIf="records.length<=0" >
             <tr>
-              <td style="text-align:center;" colspan="5">No Record Found.</td>
+              <td style="text-align:center;" colspan="5">We can't find any record.</td>
             </tr>
           </tbody>
         </table>

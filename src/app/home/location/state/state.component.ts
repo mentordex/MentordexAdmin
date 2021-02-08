@@ -111,12 +111,15 @@ export class StateComponent implements OnInit {
   cancelEdit(){
     this.addEditForm.reset();
     this.addEditForm.patchValue({ country_id: ''})  
+    this.addEditForm.patchValue({ is_active: true}) 
     this.isCollapsed = true;    
     this.formStatus = 'Add'
   }
 
   resetSearch(){
     this.searchForm.reset();
+    this.addEditForm.patchValue({ country_id: ''})
+    this.addEditForm.patchValue({ is_active: true})
     this.pagination['search'] = ''  
     this.pagination['country_id'] = this.selectedCountryId
     this.searchForm.patchValue({country_id: this.selectedCountryId})
@@ -126,11 +129,11 @@ export class StateComponent implements OnInit {
   delete(record){
     //console.log(record)
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'All related  cities will be deleted. You will not be able to recover this record!',
+      title: 'Are you sure you want to delete the state',
+      text: 'All the cities for this state will be deleted as well.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: 'Yes, delete it',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
@@ -139,6 +142,8 @@ export class StateComponent implements OnInit {
           if(response){
             this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-DELETED']);          
             this.addEditForm.reset();
+            this.addEditForm.patchValue({ country_id: ''})
+            this.addEditForm.patchValue({ is_active: true})
             this.isCollapsed = true;
             this.formStatus = 'Add'   
             this.fetchListing()
@@ -169,7 +174,10 @@ export class StateComponent implements OnInit {
     
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
     this.utilsService.processPostRequest('/state/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
+      if(this.addEditForm.get('id').value)        
+        this.utilsService.onSuccess(environment.MESSAGES['STATE-SUCCESSFULLY-UPDATED']);
+      else        
+        this.utilsService.onSuccess(environment.MESSAGES['STATE-SUCCESSFULLY-SAVED']); 
       this.cancelEdit()
       this.fetchListing()
     })

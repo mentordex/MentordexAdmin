@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from "@angular/router";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from "@angular/router";
 
 
 //services
@@ -70,6 +70,11 @@ export class CityComponent implements OnInit {
       state_id:['']
     })
     this.activatedRoute.params.subscribe((params) => {  
+      const stateID =  ('stateID' in params)?params['stateID']:''
+      this.selectedStateId = stateID
+      this.pagination['state_id'] = stateID
+      this.searchForm.patchValue({state_id:stateID})
+
       const countryID =  ('countryID' in params)?params['countryID']:''
       this.selectedCountryId =countryID
       this.pagination['country_id'] = countryID
@@ -79,6 +84,7 @@ export class CityComponent implements OnInit {
   
     this.fetchCountries()
     this.fetchListing() 
+    this.fetchAllStates();
     
   }
   
@@ -111,6 +117,12 @@ export class CityComponent implements OnInit {
      this.countries = response    
     })
   }
+  fetchAllStates(){
+    this.utilsService.processPostRequest('/state/listing',{}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      this.states2 = response    
+     })
+  }
+
   fetchStates(event){
     var countryID = event.target.value
     if(countryID.length>0){
@@ -131,7 +143,7 @@ export class CityComponent implements OnInit {
   onSelectstate(event){
     this.selectedStateId = event.target.value
     this.pagination['state_id'] = event.target.value
-    this.searchForm.patchValue({country_id:event.target.value})      
+    this.searchForm.patchValue({state_id:event.target.value})      
     this.fetchListing();
 
   }
@@ -215,11 +227,10 @@ export class CityComponent implements OnInit {
   delete(record){
     //console.log(record)
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will not be able to recover this record!',
+      title: 'Are you sure you want to delete the city',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: 'Yes, delete it',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
@@ -274,8 +285,11 @@ export class CityComponent implements OnInit {
     } 
     
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
-    this.utilsService.processPostRequest('/city/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
+    this.utilsService.processPostRequest('/city/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe(() => {
+      if(this.addEditForm.get('id').value)        
+        this.utilsService.onSuccess(environment.MESSAGES['CITY-SUCCESSFULLY-UPDATED']);
+      else        
+        this.utilsService.onSuccess(environment.MESSAGES['CITY-SUCCESSFULLY-SAVED']); 
       this.zipcodes = []
       this.cancelEdit()
       this.fetchListing()

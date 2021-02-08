@@ -130,10 +130,20 @@ const routes: Routes = [
     data: { title: 'State List' }
   },
   {
+    path: 'state/:countryID',
+    component: StateComponent,   
+    data: { title: 'State List' }
+  },
+  {
     path: 'city',
     component: CityComponent,   
     data: { title: 'City List' }
-  }
+  },
+  {
+    path: 'city/:stateID',
+    component: CityComponent,   
+    data: { title: 'City List' }
+  },
   
 
   

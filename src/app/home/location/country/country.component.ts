@@ -60,13 +60,12 @@ export class CountryComponent implements OnInit {
     this.isCollapsed = false;
     this.addEditForm.patchValue({ id: record._id})
     this.addEditForm.patchValue({ title: record.title})
-    this.addEditForm.patchValue({ is_active: record.is_active})
-
-
-    
+    this.addEditForm.patchValue({ is_active: record.is_active})    
   }
+
   cancelEdit(){
     this.addEditForm.reset();
+    this.addEditForm.patchValue({ is_active: true})  
     this.isCollapsed = true;
     this.formStatus = 'Add'
   }
@@ -80,11 +79,11 @@ export class CountryComponent implements OnInit {
   delete(record){
     //console.log(record)
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'All related state & cities will be deleted. You will not be able to recover this record!',
+      title: 'Are you sure you want to delete the country',
+      text: 'All the states & cities will be deleted as well.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonText: 'Yes, delete it',
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
@@ -93,6 +92,7 @@ export class CountryComponent implements OnInit {
           if(response){
             this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-DELETED']);          
             this.addEditForm.reset();
+            this.addEditForm.patchValue({ is_active: true}) 
             this.isCollapsed = true;
             this.formStatus = 'Add'   
             this.fetchListing()
@@ -123,7 +123,10 @@ export class CountryComponent implements OnInit {
     
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
     this.utilsService.processPostRequest('/country/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-      this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
+      if(this.addEditForm.get('id').value)        
+        this.utilsService.onSuccess(environment.MESSAGES['COUNTRY-SUCCESSFULLY-UPDATED']);
+      else        
+        this.utilsService.onSuccess(environment.MESSAGES['COUNTRY-SUCCESSFULLY-SAVED']); 
       this.cancelEdit()
       this.fetchListing()
     })
