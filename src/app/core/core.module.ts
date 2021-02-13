@@ -16,6 +16,7 @@ import { SidebarLeftInnerComponent } from './components/sidebar-left-inner/sideb
 import { SidebarRightInnerComponent } from './components/sidebar-right-inner/sidebar-right-inner.component';
 import { FormValidationErrorsComponent } from './components/form-validation-errors/form-validation-errors.component';
 import { PageLoaderComponent } from './components/page-loader/page-loader.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { FirstLetterCapitalPipe } from './pipes/first-letter-capital.pipe';
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
@@ -37,7 +38,7 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     DropzoneModule,
     TagInputModule
   ],
-  declarations: [HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe],
-  exports: [ ImageCropperModule, NgxPaginationModule, NgxDatatableModule, ToastrModule, BoxModule, TabsModule, HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, NgxMaskModule, DropzoneModule, TagInputModule]
+  declarations: [HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, BreadcrumbsComponent],
+  exports: [ ImageCropperModule, NgxPaginationModule, NgxDatatableModule, ToastrModule, BoxModule, TabsModule, HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, NgxMaskModule, DropzoneModule, TagInputModule, BreadcrumbsComponent]
 })
 export class CoreModule { }

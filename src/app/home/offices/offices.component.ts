@@ -17,6 +17,7 @@ import Swal from 'sweetalert2'
 })
 export class OfficesComponent implements OnInit {
   destroy$: Subject<boolean> = new Subject<boolean>();
+  
   isLoading:boolean = false;
   isCollapsed:boolean = true;
   formStatus:string = 'Add'

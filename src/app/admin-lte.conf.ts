@@ -15,7 +15,7 @@ export const adminLteConf = {
 
 
     {label: 'Listing NAVIGATION', separator: true},
-    
+    {label: 'Appointment Listing', route: 'home/appointment', iconClasses: 'fa fa-user'},
     {label: 'User Listing', route: 'home/users', iconClasses: 'fa fa-user'},
     {label: 'Category Listing', route: 'home/category', iconClasses: 'fa fa-tasks'},
     {label: 'Subcategory Listing', route: 'home/subcategory', iconClasses: 'fa fa-tasks'},

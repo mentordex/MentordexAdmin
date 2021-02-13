@@ -1,3 +1,11 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+ <app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+ <!--=================================
+    breadcrumbs and inner-intro -->
+
 <mk-box header="{{formStatus}} City" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
@@ -80,7 +88,7 @@
   <div class="box-header">
     <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
       <div style="width:50%">
-        <h3 class="box-title">City Listing</h3>     
+          
         
       </div>
 
@@ -139,7 +147,14 @@
           <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: pagination.size, currentPage: pagination.pageNumber, totalItems: totalRecords }">
             <td scope="row"><img class="listing-img" src="{{record?.image}}" onerror="this.src='assets/img/avatar.png'"></td>
             <td>{{record?.title}}</td> 
-            <td>{{(record?.is_active)?'Active':'Inactive'}}</td>
+            <td>
+                
+              <label class="switch">
+                <input type="checkbox" [checked]="record?.is_active?true:false">
+                <span class="slider round"></span>
+              </label>
+
+            </td>
             <td>{{record?.created_at | date:'MMM dd, y h:mm:ss a'}}</td>
               <td>{{record?.modified_at | date:'MMM dd, y h:mm:ss a'}}</td>
             

@@ -19,6 +19,7 @@ import { FaqCategoryComponent } from './faq-category/faq-category.component';
 import { CountryComponent } from './location/country/country.component';
 import { StateComponent } from './location/state/state.component';
 import { CityComponent } from './location/city/city.component';
+import { AppointmentComponent } from './appointment/appointment.component';
 
 const routes: Routes = [
   {
@@ -143,6 +144,11 @@ const routes: Routes = [
     path: 'city/:stateID',
     component: CityComponent,   
     data: { title: 'City List' }
+  },
+  {
+    path: 'appointment',
+    component: AppointmentComponent,   
+    data: { title: 'Appointment List' }
   },
   
 

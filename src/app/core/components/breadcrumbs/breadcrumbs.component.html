@@ -1,0 +1,18 @@
+<section class="content-header">
+   <h4> {{pageTitle}} </h4>
+
+   <ol class="breadcrumb">
+      <li *ngFor="let breadcrumb of breadcrumbs; let first = first; let last = last" [ngClass]="{'active': last}">
+        
+         <a *ngIf="!last" routerLink="{{breadcrumb.link}}">
+            <i *ngIf="first" class="fa fa-home"></i>
+            {{breadcrumb.page}}
+         </a>
+         &nbsp;<i *ngIf="!last" class="fa fa-angle-double-right"></i>
+         <span *ngIf="last">{{breadcrumb.page}}</span>
+      </li>
+   </ol>
+ </section>
+
+<!--=================================
+ inner-intro -->

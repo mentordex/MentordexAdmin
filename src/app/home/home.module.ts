@@ -23,10 +23,11 @@ import { CountryComponent } from './location/country/country.component';
 import { StateComponent } from './location/state/state.component';
 import { CityComponent } from './location/city/city.component';
 import { ImageUploadDropzoneComponent } from './image-upload-dropzone/image-upload-dropzone.component';
+import { AppointmentComponent } from './appointment/appointment.component';
 
 
 @NgModule({
-  declarations: [AdminsComponent, UsersComponent, CategoryComponent, NeighbourhoodComponent, PropertyTypeComponent, PropertyComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, ViewPropertyComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent, CountryComponent, StateComponent, CityComponent, ImageUploadDropzoneComponent],
+  declarations: [AdminsComponent, UsersComponent, CategoryComponent, NeighbourhoodComponent, PropertyTypeComponent, PropertyComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, ViewPropertyComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent, CountryComponent, StateComponent, CityComponent, ImageUploadDropzoneComponent, AppointmentComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

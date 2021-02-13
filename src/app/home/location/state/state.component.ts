@@ -17,6 +17,8 @@ import Swal from 'sweetalert2'
 export class StateComponent implements OnInit {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
+  title: string = 'State Listing';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Countries', link: '/home/country' }, { page: 'States', link: '' }]
   isLoading:boolean = false;
   isCollapsed:boolean = true;
   formStatus:string = 'Add'
@@ -94,7 +96,12 @@ export class StateComponent implements OnInit {
     this.utilsService.processPostRequest('/admin/stateListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       //console.log('response',response);
       this.records = response['records'];     
-      this.totalRecords = response['total_records'];     
+      this.totalRecords = response['total_records'];   
+      if(this.totalRecords>1){
+        this.title = `States Listing(${this.totalRecords})`
+      }else{
+        this.title = `State Listing(${this.totalRecords})`
+      }   
       this.utilsService.hidePageLoader();//hide page loader
     })
   }

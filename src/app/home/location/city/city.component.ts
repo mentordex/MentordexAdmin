@@ -21,6 +21,8 @@ import Swal from 'sweetalert2'
 export class CityComponent implements OnInit {
   isReset:Boolean = false
   destroy$: Subject<boolean> = new Subject<boolean>();
+  title: string = 'City Listing';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Countries', link: '/home/country' }, { page: 'States', link: '/home/state' },{page: 'Cities', link: ''}]
   isLoading:boolean = false;
   isCollapsed:boolean = true;
   formStatus:string = 'Add'
@@ -74,6 +76,8 @@ export class CityComponent implements OnInit {
       this.selectedStateId = stateID
       this.pagination['state_id'] = stateID
       this.searchForm.patchValue({state_id:stateID})
+
+     //this.breadcrumbs = [{ page: 'Home', link: '/home' }, { page: 'Countries', link: '/home/country' }, { page: 'States', link: '/home/state/'+stateID },{page: 'Cities', link: ''}]
 
       const countryID =  ('countryID' in params)?params['countryID']:''
       this.selectedCountryId =countryID
@@ -175,7 +179,12 @@ export class CityComponent implements OnInit {
     this.utilsService.processPostRequest('/admin/cityListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       //console.log('response',response);
       this.records = response['records'];     
-      this.totalRecords = response['total_records'];     
+      this.totalRecords = response['total_records'];  
+      if(this.totalRecords>1){
+        this.title = `Cities Listing(${this.totalRecords})`
+      }else{
+        this.title = `City Listing(${this.totalRecords})`
+      }   
       this.utilsService.hidePageLoader();//hide page loader
     })
   }
