@@ -93,6 +93,18 @@ export class CityComponent implements OnInit {
   }
   
 
+  statusChange(event, id){
+    console.log(event.target.value, id)
+    console.log(event.target.checked, id)
+    this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
+    this.utilsService.processPostRequest('/city/changeStatus',{is_active:event.target.checked,id:id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+       
+      this.utilsService.onSuccess(environment.MESSAGES['CITY-SUCCESSFULLY-UPDATED']); 
+      this.utilsService.hidePageLoader();//hide page loader  
+      this.fetchListing() 
+     })
+  }
+
   onAddZipcode(zipcode){
     const index = (this.zipcodes).indexOf(zipcode);
     if (index<=0) {

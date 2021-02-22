@@ -70,6 +70,17 @@ export class StateComponent implements OnInit {
     
   }
 
+  statusChange(event, id){
+    console.log(event.target.value, id)
+    console.log(event.target.checked, id)
+    this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
+    this.utilsService.processPostRequest('/state/changeStatus',{is_active:event.target.checked,id:id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    
+      this.utilsService.onSuccess(environment.MESSAGES['STATE-SUCCESSFULLY-UPDATED']); 
+      this.utilsService.hidePageLoader();//hide page loader  
+      this.fetchListing() 
+     })
+  }
   
 
   fetchCountries(){

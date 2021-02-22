@@ -189,3 +189,22 @@ image-cropper .overlay {
   .slider.round:before {
     border-radius: 50%;
   }
+  .ng2-tag-input__text-input{
+    width:500px !important;
+ }
+
+div#checkbox-slot ul.checkbox-items {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div#checkbox-slot li {
+    list-style: none;
+    width: calc(100% / 4);
+    display: flex;
+}
+div#checkbox-slot input[type="checkbox"] {
+    margin-right: 5px;
+}

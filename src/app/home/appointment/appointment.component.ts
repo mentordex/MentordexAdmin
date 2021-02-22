@@ -16,6 +16,8 @@ import Swal from 'sweetalert2'
 export class AppointmentComponent implements OnInit {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
+  title: string = 'Appointment Listing';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Appointments', link: '' }]
   isLoading:boolean = false;
   isCollapsed:boolean = true;
   formStatus:string = 'Add'
@@ -132,9 +134,54 @@ export class AppointmentComponent implements OnInit {
 
 
   fetchListing(){
+    this.totalRecords = 5
+    this.records = [
+      {
+        name:"Test Appointment",
+        email:"mentor@mailiinator.com",
+        phone:"7778787778",
+        date_time:'Feb 09, 2021 22:20:10',
+        status:true,
+        created_at:'Feb 09, 2021 22:20:10',
+        modified_at:'Feb 09, 2021 22:20:10',
+      },
+      {
+        name:"Test Appointment",
+        email:"mentor@mailiinator.com",
+        phone:"7778787778",
+        date_time:'Feb 09, 2021 22:20:10',
+        status:true,
+        created_at:'Feb 09, 2021 22:20:10',
+        modified_at:'Feb 09, 2021 22:20:10',
+      },{
+        name:"Test Appointment",
+        email:"mentor@mailiinator.com",
+        phone:"7778787778",
+        date_time:'Feb 09, 2021 22:20:10',
+        status:true,
+        created_at:'Feb 09, 2021 22:20:10',
+        modified_at:'Feb 09, 2021 22:20:10',
+      },{
+        name:"Test Appointment",
+        email:"mentor@mailiinator.com",
+        phone:"7778787778",
+        date_time:'Feb 09, 2021 22:20:10',
+        status:true,
+        created_at:'Feb 09, 2021 22:20:10',
+        modified_at:'Feb 09, 2021 22:20:10',
+      },{
+        name:"Test Appointment",
+        email:"mentor@mailiinator.com",
+        phone:"7778787778",
+        date_time:'Feb 09, 2021 22:20:10',
+        status:true,
+        created_at:'Feb 09, 2021 22:20:10',
+        modified_at:'Feb 09, 2021 22:20:10',
+      }
+    ]
     this.utilsService.showPageLoader(environment.MESSAGES["FETCHING-RECORDS"]);//show page loader
    
-    this.utilsService.processPostRequest('/admin/appointmentListing',this.pagination).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    this.utilsService.processPostRequest('/admin/mentorListing',{user_type:'MENTOR'}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       //console.log('response',response);
       this.records = response['records'];     
       this.totalRecords = response['total_records'];     

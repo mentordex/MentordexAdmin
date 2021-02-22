@@ -30,6 +30,7 @@ export const adminLteConf = {
     {label: `FAQ's Listing`, route: 'home/faqs', iconClasses: 'fa fa-tasks'},
     {label: `Offices Listing`, route: 'home/offices', iconClasses: 'fa fa-tasks'},
     {label: `Team Listing`, route: 'home/team', iconClasses: 'fa fa-tasks'},
+    {label: `Slots Listing`, route: 'home/slots', iconClasses: 'fa fa-tasks'},
     {label: 'Other Actions', separator: true},
     {label: 'Profile', route: 'home/profile', iconClasses: 'fa fa-tasks'},
     {label: 'Change Password', route: 'home/change-password', iconClasses: 'fa fa-tasks'},

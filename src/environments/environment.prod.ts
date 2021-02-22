@@ -18,7 +18,9 @@ export const environment = {
     "STATE-SUCCESSFULLY-SAVED":"New state has been added successfully.",
     "STATE-SUCCESSFULLY-UPDATED":"The state record has been successfully updated.",
     "CITY-SUCCESSFULLY-SAVED":"New city has been added successfully.",
-    "CITY-SUCCESSFULLY-UPDATED":"The city record has been successfully updated."
+    "CITY-SUCCESSFULLY-UPDATED":"The city record has been successfully updated.",
+    "DAYTIMESLOT-SUCCESSFULLY-SAVED":"New day with time slots has been added successfully.",
+    "DAYTIMESLOT-SUCCESSFULLY-UPDATED":"The day record has been successfully updated.",
   }
 };
 

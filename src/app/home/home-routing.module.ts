@@ -20,6 +20,7 @@ import { CountryComponent } from './location/country/country.component';
 import { StateComponent } from './location/state/state.component';
 import { CityComponent } from './location/city/city.component';
 import { AppointmentComponent } from './appointment/appointment.component';
+import { SlotsComponent } from './slots/slots.component';
 
 const routes: Routes = [
   {
@@ -146,10 +147,21 @@ const routes: Routes = [
     data: { title: 'City List' }
   },
   {
+    path: 'city/:stateID/:countryID',
+    component: CityComponent,   
+    data: { title: 'City List' }
+  },
+  {
     path: 'appointment',
     component: AppointmentComponent,   
     data: { title: 'Appointment List' }
   },
+  {
+    path: 'slots',
+    component:   SlotsComponent ,   
+    data: { title: 'Slots List' }
+  },
+
   
 
   

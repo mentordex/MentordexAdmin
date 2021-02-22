@@ -26,9 +26,9 @@
       <app-image-upload-dropzone (onImageUploadSuccess)="updateForm($event)"></app-image-upload-dropzone>
     
       <div *ngIf="addEditForm.controls.image.value"><img style="width:100px" src="{{addEditForm.controls.image.value}}"></div>
-      <div  class="form-group">
+      <div  class="form-group zipcode-width">
         <label>Zip codes*</label>
-        <tag-input formControlName="zipcodes"  (onRemove)="onZipcodeRemoved($event)" (onAdd)="onAddZipcode($event)" [modelAsStrings]="true" [secondaryPlaceholder]="'Enter the zip code. Only 1 zip code is required.'" [placeholder]="'Enter More+'"></tag-input>
+        <tag-input formControlName="zipcodes" inputClass="zipcode-width"  (onRemove)="onZipcodeRemoved($event)" (onAdd)="onAddZipcode($event)" [modelAsStrings]="true" [secondaryPlaceholder]="'Enter the zip code. Only 1 zip code is required.'" [placeholder]="'Enter More+'"></tag-input>
         <i>Press ENTER to add multiple zip code.</i>
       </div>
       
@@ -59,11 +59,10 @@
 
         <div  class="form-group">
           <label>Status*</label>
-          <select formControlName="is_active" class="form-control">                 
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-            
-          </select>
+          <label class="switch">
+            <input type="checkbox" formControlName="is_active" [checked]="(addEditForm.controls.is_active.value)?true:false">
+            <span class="slider round"></span>
+          </label>          
           <p class="errorCls"  *ngIf="addEditForm.controls.is_active.touched || isFormSubmitted">
             <app-form-validation-errors errorPrefix="Status " [errors]="addEditForm.get('is_active').errors"></app-form-validation-errors>
           </p> 
@@ -93,12 +92,12 @@
       </div>
 
       <div class="listing-view">
-        <!--<div  class="form-group">    
+        <div  class="form-group">    
           <select formControlName="country_id" (change)="onSelectCountry($event)" class="form-control">
             <option value="">Sort by country</option>
             <option *ngFor="let country of countries" value="{{country._id}}">{{country.title}}</option>
           </select>
-        </div>-->
+        </div>
         <div  class="form-group">    
           <select formControlName="state_id" (change)="onSelectstate($event)" class="form-control">
             <option value="">Sort by  State</option>
@@ -150,7 +149,7 @@
             <td>
                 
               <label class="switch">
-                <input type="checkbox" [checked]="record?.is_active?true:false">
+                <input type="checkbox" (change)="statusChange($event, record?._id)" [checked]="record?.is_active?true:false">
                 <span class="slider round"></span>
               </label>
 
