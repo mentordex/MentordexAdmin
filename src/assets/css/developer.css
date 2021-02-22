@@ -208,3 +208,6 @@ div#checkbox-slot li {
 div#checkbox-slot input[type="checkbox"] {
     margin-right: 5px;
 }
+.modal-backdrop.in{
+  z-index: 100 !important;
+}

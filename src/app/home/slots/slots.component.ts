@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -7,7 +7,7 @@ import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@ang
 import { TitleService, UtilsService } from '../../core/services'
 import { environment } from '../../../environments/environment'
 import Swal from 'sweetalert2'
-
+declare var $;
 
 @Component({
   selector: 'app-slots',
@@ -15,10 +15,10 @@ import Swal from 'sweetalert2'
   styleUrls: ['./slots.component.css']
 })
 export class SlotsComponent implements OnInit {
-
-  title: string = 'Day Time-Slots Listing';
-  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Day Time-Slots', link: '' }]
-
+  
+  title: string = 'Appointment Slots';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Appointment Slots', link: '' }]
+  viewMoreSlots:any = []
   destroy$: Subject<boolean> = new Subject<boolean>();
   isLoading:boolean = false;
   isCollapsed:boolean = true;
@@ -57,6 +57,17 @@ export class SlotsComponent implements OnInit {
   }
 
  
+
+  viewSlots(record){    
+    this.viewMoreSlots = record.slots
+    $('#slotsModal').modal('show');
+         
+  }
+
+  processSlots(slots){    
+    const result = slots.filter(slot => slot.isChecked==true  );
+    return result;
+  }
 
   initalizeSlots(){
     for(var i=0;i<24;i++){

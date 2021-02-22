@@ -7,12 +7,12 @@
     breadcrumbs and inner-intro -->
 
 
-<mk-box header="{{formStatus}} Day Slots" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
+<mk-box header="{{formStatus}} Slot" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
-    <a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
+    <!--<a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
         <i class="fa fa-repeat"></i> Reset
-    </a>
+    </a>-->
     
     <!-- Add/Update Record-->
     <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-group" id="checkbox-slot">
-                <label>Slots*</label>
+                <label>Appointment Slots*</label>
                 <ul class="checkbox-items">
                     <li *ngFor="let slot of slots;let i = index">
                       <input type="checkbox" [checked]="slot.isChecked" (change)="changeSelection($event,i)">{{slot.slot}}
@@ -67,11 +67,11 @@
       <table class="table table-hover">
           <thead>
             <tr>
-              <th>Day</th>  
-              <th>Status</th>
-              <th>Time Slots</th>         
+              <th>Day</th>              
+              <th>Slots </th>         
               <th>Created On</th>
-              <th>Updated On</th>              
+              <th>Updated On</th> 
+              <th>Status</th>             
               <th>Action</th>
             </tr>
           </thead>
@@ -79,6 +79,19 @@
             <tr *ngFor="let record of records">
                    
               <td>{{record?.day}}</td>
+              
+              <td>
+                <span *ngFor="let slot of processSlots(record.slots);let i =index;let last = last;">  
+                              
+                  <p style="background-color: #3233; border-radius: 20px;width: 45%;" *ngIf="slot.isChecked && i<2">{{slot.slot}}</p>
+                  <a *ngIf="i>1 && last" href="javascript:void(0)" (click)="viewSlots(record)">View More</a>
+                </span>
+                
+                
+            
+              </td>
+              <td>{{record?.created_at | date:'MMM dd, y h:mm:ss a'}}</td>
+              <td>{{record?.modified_at | date:'MMM dd, y h:mm:ss a'}}</td> 
               <td>
                 
                 <label class="switch">
@@ -86,15 +99,7 @@
                   <span class="slider round"></span>
                 </label>
 
-              </td>
-              <td>
-                <span *ngFor="let slot of record.slots">                 
-                  <p style="background-color: #3233; border-radius: 20px;width: 45%;" *ngIf="slot.isChecked">{{slot.slot}}</p>
-                </span>
-            
-              </td>
-              <td>{{record?.created_at | date:'MMM dd, y h:mm:ss a'}}</td>
-              <td>{{record?.modified_at | date:'MMM dd, y h:mm:ss a'}}</td>            
+              </td>           
               <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a></td>
             </tr>          
           </tbody>
@@ -108,3 +113,28 @@
     
       
   </mk-box>
+
+
+  <!-- Stillcut images Modal -->
+<div class="modal fade"  id="slotsModal"  style = "z-index: 1040 !important;" tabindex="-1" role="dialog" >
+  <div class="modal-dialog mw-100 w-75" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="appointmentSection" style="text-transform:none">Appointment Slots.</h5>        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"> 
+       
+        <div class="row">
+            <div *ngFor="let slot of viewMoreSlots">
+              <span *ngIf="slot.isChecked">{{slot.slot}}</span>
+            </div>
+        </div>       
+                 
+    </div>
+
+    
+  </div>
+</div>
