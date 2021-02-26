@@ -45,7 +45,9 @@ export class SlotsComponent implements OnInit {
  
   ngOnInit(): void {
     this.titleService.setTitle();
+    
     this.fetchListing() 
+
     
     this.addEditForm=this.formBuilder.group({     
       id:[null],
@@ -58,9 +60,9 @@ export class SlotsComponent implements OnInit {
 
  
 
-  viewSlots(record){    
-    this.viewMoreSlots = record.slots
-    $('#slotsModal').modal('show');
+  viewSlots(record){        
+    this.viewMoreSlots = (record.slots).filter(slot => slot.isChecked==true  );
+    $('#bmodal').modal({show:true})
          
   }
 
@@ -129,17 +131,19 @@ export class SlotsComponent implements OnInit {
   editAction(record){
     this.formStatus = 'Update'
     this.isCollapsed = false;
-    this.addEditForm.patchValue({ id: record._id})
-    this.addEditForm.patchValue({ day: record.day}) 
-    this.addEditForm.patchValue({ slots: record.slots})
-    this.addEditForm.patchValue({ is_active: record.is_active}) 
-    record.slots.forEach(function(v){ delete v._id }); 
-    var selctedslots =   record.slots
-    this.slots =   selctedslots
-    console.log('form',record)
-    console.log('slots',this.slots)
-    
+    this.utilsService.showPageLoader(environment.MESSAGES["FETCHING-RECORD"]);//show page loader
+    this.utilsService.processPostRequest('/dayTimeslot/fetchSlot',{id:record._id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {      
+      this.utilsService.hidePageLoader();//hide page loader  
+      this.addEditForm.patchValue({ id: record._id})
+      this.addEditForm.patchValue({ day: record.day}) 
+      this.addEditForm.patchValue({ slots: record.slots})
+      this.addEditForm.patchValue({ is_active: record.is_active}) 
+      record.slots.forEach(function(v){ delete v._id }); 
+      var selctedslots =   record.slots
+      this.slots =   selctedslots
+    })   
   }
+
   cancelEdit(){
     this.addEditForm.reset();  
     this.isCollapsed = true;    

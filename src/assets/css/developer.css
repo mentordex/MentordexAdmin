@@ -208,6 +208,29 @@ div#checkbox-slot li {
 div#checkbox-slot input[type="checkbox"] {
     margin-right: 5px;
 }
-.modal-backdrop.in{
-  z-index: 100 !important;
+
+
+div#checkbox-slot-list ul.checkbox-items {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div#checkbox-slot-list li {
+    list-style: none;
+    width: calc(100% / 3);
+    display: flex;
+    padding: 5px;
+}
+
+
+
+#bmodal .modal-dialog{
+    margin: auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.modal-dialog{
+    width:600px !important
 }

@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-group" id="checkbox-slot">
-                <label>Appointment Slots*</label>
+                <label>Slots*</label>
                 <ul class="checkbox-items">
                     <li *ngFor="let slot of slots;let i = index">
                       <input type="checkbox" [checked]="slot.isChecked" (change)="changeSelection($event,i)">{{slot.slot}}
@@ -116,25 +116,25 @@
 
 
   <!-- Stillcut images Modal -->
-<div class="modal fade"  id="slotsModal"  style = "z-index: 1040 !important;" tabindex="-1" role="dialog" >
-  <div class="modal-dialog mw-100 w-75" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="appointmentSection" style="text-transform:none">Appointment Slots.</h5>        
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <div class="modal" id="bmodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" style="width:1250px;" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" style="text-align:center">Avaliable Slots</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group" id="checkbox-slot-list">
+            
+            <ul class="checkbox-items">
+                <li *ngFor="let slot of viewMoreSlots;let i = index">
+                  {{slot.slot}}
+                </li>
+              </ul>
+        </div>
+        </div>        
       </div>
-      <div class="modal-body"> 
-       
-        <div class="row">
-            <div *ngFor="let slot of viewMoreSlots">
-              <span *ngIf="slot.isChecked">{{slot.slot}}</span>
-            </div>
-        </div>       
-                 
     </div>
-
-    
   </div>
-</div>

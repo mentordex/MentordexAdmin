@@ -21,6 +21,7 @@ import { StateComponent } from './location/state/state.component';
 import { CityComponent } from './location/city/city.component';
 import { AppointmentComponent } from './appointment/appointment.component';
 import { SlotsComponent } from './slots/slots.component';
+import { BannerComponent } from './banner/banner.component';
 
 const routes: Routes = [
   {
@@ -161,6 +162,13 @@ const routes: Routes = [
     component:   SlotsComponent ,   
     data: { title: 'Slots List' }
   },
+  {
+    path: 'banners',
+    component:   BannerComponent ,   
+    data: { title: 'Banners List' }
+  },
+
+  
 
   
 

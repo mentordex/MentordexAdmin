@@ -25,6 +25,10 @@ export const environment = {
     "CITY-SUCCESSFULLY-UPDATED":"The city record has been successfully updated.",
     "DAYTIMESLOT-SUCCESSFULLY-SAVED":"Slot has been added successfully.",
     "DAYTIMESLOT-SUCCESSFULLY-UPDATED":"Slot has been updated successfully.",
+    "BANNER-SUCCESSFULLY-SAVED":"New banner has been added successfully.",
+    "BANNER-SUCCESSFULLY-UPDATED":"The banner record has been successfully updated.",
+    
+    "FETCHING-RECORD":"Fetching Record Data"
     
   }
 };
