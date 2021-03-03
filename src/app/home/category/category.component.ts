@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -17,6 +17,8 @@ import * as Dropzone from 'dropzone';
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
+  title: string = 'Category Listing';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Categories', link: '' }]
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   public imageUploadconfig: DropzoneConfigInterface;
@@ -36,10 +38,9 @@ export class CategoryComponent implements OnInit {
   searchForm: FormGroup;
   isSearchFormSubmitted:boolean = false;
 
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
+  uploadedImage:string=''
  
-  constructor(private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder) { 
+  constructor(private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder, private ngZone: NgZone) { 
  
   }
 
@@ -50,13 +51,13 @@ export class CategoryComponent implements OnInit {
       paramName: "file",
       uploadMultiple: false,
       url: environment.API_ENDPOINT + "/api/uploadImage",
-      maxFiles: 30,
+      maxFiles: 1,
       autoReset: null,
       errorReset: null,
       cancelReset: null,
       //acceptedFiles: '.jpg, .png, .jpeg',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div><p>Drag and drop image here</p></div>', 
+      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div><p>Image thumbnail(300*200)</p></div>', 
      // previewsContainer: "#vehicleImagesPreview",        
       addRemoveLinks: false,
       //createImageThumbnails:false,
@@ -81,7 +82,11 @@ export class CategoryComponent implements OnInit {
 
 
         this.on('sending', function (file, xhr, formData) {
-          componentObj.utilsService.showPageLoader();//start showing page loader         
+          componentObj.utilsService.showPageLoader();//start showing page loader 
+          
+          formData.append('folder', 'category');
+          formData.append('fileType', file.type);
+          componentObj.utilsService.showPageLoader();//start showing page loader 
          
         });
         this.on("totaluploadprogress", function (progress) {
@@ -92,8 +97,13 @@ export class CategoryComponent implements OnInit {
         })
 
         this.on("success", function (file, response) {
-          // Called after the file successfully uploaded.  
-          console.log('response.fileLocation',response.fileLocation);
+          // Called after the file successfully uploaded. 
+          componentObj.ngZone.run(() => {
+              componentObj.uploadedImage = response.file
+              componentObj.addEditForm.patchValue({ image: response.file})
+              componentObj.addEditForm.patchValue({image_object:{ file_path: response.file, file_name: response.fileName, file_key: response.fileKey, file_mimetype: response.fileMimeType, file_category: 'category' }})
+          });
+          console.log('response.fileLocation',response);
           this.removeFile(file);
           componentObj.utilsService.hidePageLoader();//hide page loader
         });
@@ -117,7 +127,8 @@ export class CategoryComponent implements OnInit {
       id:[null],
       title: [null, [Validators.required]],
       is_visible_on_home:[false],
-      image:[]
+      image:[],
+      image_object:[]
     })
 
     this.searchForm=this.formBuilder.group({    
@@ -133,18 +144,16 @@ export class CategoryComponent implements OnInit {
     this.addEditForm.patchValue({ id: record._id})
     this.addEditForm.patchValue({ title: record.title})
     this.addEditForm.patchValue({ image: record.image})
+    this.addEditForm.patchValue({ image_object: record.image_object})    
     this.addEditForm.patchValue({ is_visible_on_home: record.is_visible_on_home})
-
-    if((record.image).length>0)
-      this.croppedImage = record.image
+    this.uploadedImage = record.image
 
     
   }
   cancelEdit(){
     this.addEditForm.reset();
-    this.isCollapsed = true;
-    this.imageChangedEvent ='';
-    this.croppedImage = ''
+    this.isCollapsed = true;   
+    this.uploadedImage = ''
     this.formStatus = 'Add'
   }
 
@@ -208,6 +217,10 @@ export class CategoryComponent implements OnInit {
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
     this.utilsService.processPostRequest('/category/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
+      
+      this.ngZone.run(() => {
+        this.uploadedImage = ''
+      });
       this.cancelEdit()
       this.fetchListing()
     })

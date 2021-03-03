@@ -10,9 +10,6 @@ import { TitleService, UtilsService } from '../../../core/services'
 import { environment } from '../../../../environments/environment'
 import Swal from 'sweetalert2'
 
-
-
-
 @Component({
   selector: 'app-city',
   templateUrl: './city.component.html',

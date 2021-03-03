@@ -1,3 +1,11 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+ <app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+ <!--=================================
+    breadcrumbs and inner-intro -->
+
 <mk-box header="{{formStatus}} Category" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
@@ -20,8 +28,11 @@
         </div>
         
         <div class="form-group">
-          <div class="dropzone" [dropzone]="imageUploadconfig"></div>            
-        </div>         
+          <div class="dropzone" [dropzone]="imageUploadconfig"></div> 
+          <i>Valid Types: jpeg/jpg/png/svg.</i>           
+        </div> 
+        <div *ngIf="uploadedImage"><img style="width:100px" src="{{uploadedImage}}"></div>
+                
           
       </div>
       <!-- /.box-body -->
@@ -37,7 +48,7 @@
 
 <mk-box [isLoading]="isLoading"  [isCollapsable]="false" [isRemovable]="false">
   <div class="box-header">
-    <h3 class="box-title">Category Listing</h3>
+    
 
     <div class="box-tools search_box">
         <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
@@ -85,7 +96,7 @@
         </tbody>
         <tbody *ngIf="records.length<=0" >
           <tr>
-            <td style="text-align:center;" colspan="5">No Record Found.</td>
+            <td style="text-align:center;" colspan="5">We can't find any record.</td>
           </tr>
         </tbody>
       </table>

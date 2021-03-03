@@ -234,3 +234,15 @@ div#checkbox-slot-list li {
 .modal-dialog{
     width:600px !important
 }
+.dz-preview{
+    display: none;
+}
+.dz-preview .dz-details{
+    display: none;
+}
+.dz-preview .dz-success-mark{
+    display: none;
+}
+.dz-preview .dz-error-mark{
+    display: none;
+}

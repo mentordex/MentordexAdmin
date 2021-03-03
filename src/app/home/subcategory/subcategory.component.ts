@@ -1,14 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from "@angular/router";
-import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 
 //services
 import { TitleService, UtilsService } from '../../core/services'
 import { environment } from '../../../environments/environment'
 import Swal from 'sweetalert2'
+import * as Dropzone from 'dropzone';
 
 @Component({
   selector: 'app-subcategory',
@@ -16,7 +17,11 @@ import Swal from 'sweetalert2'
   styleUrls: ['./subcategory.component.css']
 })
 export class SubcategoryComponent implements OnInit {
+  title: string = 'Subcategory Listing';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Subcategories', link: '' }]
+
   destroy$: Subject<boolean> = new Subject<boolean>();
+  public imageUploadconfig: DropzoneConfigInterface;
   isLoading:boolean = false;
   isCollapsed:boolean = true;
   formStatus:string = 'Add'
@@ -36,14 +41,88 @@ export class SubcategoryComponent implements OnInit {
   searchForm: FormGroup;
   isSearchFormSubmitted:boolean = false;
 
-  imageChangedEvent: any = '';
-  croppedImage: any = '';
+  uploadedImage:string=''
 
-  constructor(private activatedRoute:ActivatedRoute, private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder) { 
+  constructor(private activatedRoute:ActivatedRoute, private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder, private ngZone: NgZone) { 
     
   }
 
  
+  private imageUploadConfigInit() {
+    const componentObj = this;
+    this.imageUploadconfig = {
+      clickable: true,
+      paramName: "file",
+      uploadMultiple: false,
+      url: environment.API_ENDPOINT + "/api/uploadImage",
+      maxFiles: 1,
+      autoReset: null,
+      errorReset: null,
+      cancelReset: null,
+      //acceptedFiles: '.jpg, .png, .jpeg',
+      maxFilesize: 2, // MB,
+      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div><p>Image thumbnail(300*200)</p></div>', 
+     // previewsContainer: "#vehicleImagesPreview",        
+      addRemoveLinks: false,
+      //createImageThumbnails:false,
+      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
+      dictFileTooBig: 'Maximum upload file size limit is 2MB',
+      headers: {
+        'Cache-Control': null,
+        'X-Requested-With': null
+      },
+      accept: function (file, done) {
+        const reader = new FileReader();
+        const _this = this
+        reader.onload = function (event) {
+          
+          componentObj.utilsService.showPageLoader();//start showing page loader
+          done();
+
+        };
+        reader.readAsDataURL(file);
+      },
+      init: function () {      
+
+
+        this.on('sending', function (file, xhr, formData) {
+          componentObj.utilsService.showPageLoader();//start showing page loader 
+          
+          formData.append('folder', 'subcategory');
+          formData.append('fileType', file.type);
+          componentObj.utilsService.showPageLoader();//start showing page loader 
+         
+        });
+        this.on("totaluploadprogress", function (progress) {
+          componentObj.utilsService.showPageLoader('Uploading file ' + parseInt(progress) + '%')
+          if (progress >= 100) {
+            componentObj.utilsService.hidePageLoader();//hide page loader
+          }
+        })
+
+        this.on("success", function (file, response) {
+          // Called after the file successfully uploaded. 
+          componentObj.ngZone.run(() => {
+              componentObj.uploadedImage = response.file
+              componentObj.addEditForm.patchValue({ image: response.file})
+              componentObj.addEditForm.patchValue({image_object:{ file_path: response.file, file_name: response.fileName, file_key: response.fileKey, file_mimetype: response.fileMimeType, file_category: 'subcategory' }})
+          });
+          console.log('response.fileLocation',response);
+          this.removeFile(file);
+          componentObj.utilsService.hidePageLoader();//hide page loader
+        });
+
+        this.on("error", function(file, serverResponse) { 
+          this.removeFile(file);              
+          componentObj.utilsService.onError(serverResponse);//hide page loader  
+          componentObj.utilsService.hidePageLoader();//hide page loader
+          //componentObj.toastr.errorToastr(serverResponse, 'Oops!');         
+        });
+        
+      }
+    };
+  }
+
   ngOnInit(): void {
     this.titleService.setTitle();
 
@@ -51,9 +130,11 @@ export class SubcategoryComponent implements OnInit {
       id:[null],
       title: [null, [Validators.required]],    
       category_id: ['', [Validators.required]],  
-      image:[] 
+      image:[],
+      image_object:[],
+      is_active:[true], 
     })
-
+    this.imageUploadConfigInit();
     this.searchForm=this.formBuilder.group({    
       search: [null, [Validators.required]],
       category_id:['']
@@ -68,16 +149,6 @@ export class SubcategoryComponent implements OnInit {
     this.fetchCategories()
     this.fetchListing() 
     
-  }
-
-  fileChangeEvent(event: any): void { 
-    this.imageChangedEvent = event;
-    
-  }
-  imageCropped(event: ImageCroppedEvent) {
-      this.croppedImage = event.base64;
-      this.addEditForm.patchValue({image:this.croppedImage})
-     // console.log(this.croppedImage)
   }
 
 
@@ -117,16 +188,19 @@ export class SubcategoryComponent implements OnInit {
     this.addEditForm.patchValue({ title: record.title})
     this.addEditForm.patchValue({ category_id: record.category_id})
     this.addEditForm.patchValue({ image: record.image})
-
-    if((record.image).length>0)
-      this.croppedImage = record.image
+    this.addEditForm.patchValue({ is_active: record.is_active})
+    
+    this.uploadedImage = record.image
+    this.addEditForm.patchValue({ image_object: record.image_object})  
   }
   cancelEdit(){
     this.addEditForm.reset();
     this.addEditForm.patchValue({ category_id: ''})
     this.addEditForm.patchValue({ image: ''})
-    this.imageChangedEvent ='';
-    this.croppedImage = ''
+    this.addEditForm.patchValue({ image_object: ''}) 
+    this.addEditForm.patchValue({ is_active: true}) 
+    
+    this.uploadedImage = ''   
     this.isCollapsed = true;    
     this.formStatus = 'Add'
   }
@@ -182,8 +256,8 @@ export class SubcategoryComponent implements OnInit {
       this.isFormSubmitted= true
       return false;      
     }
-    
-    if(this.addEditForm.get('image').value == null){
+    console.log('image',this.addEditForm.get('image').value)
+    if(this.addEditForm.get('image').value==null || (this.addEditForm.get('image').value).length<=0){
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -194,9 +268,23 @@ export class SubcategoryComponent implements OnInit {
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
     this.utilsService.processPostRequest('/subcategory/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
+      this.ngZone.run(() => {
+        this.uploadedImage = ''
+      });
       this.cancelEdit()
       this.fetchListing()
     })
+  }
+  statusChange(event, id){
+    console.log(event.target.value, id)
+    console.log(event.target.checked, id)
+    this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
+    this.utilsService.processPostRequest('/subcategory/changeSubcategoryStatus',{is_active:event.target.checked,id:id}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+       
+      this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-UPDATED']); 
+      this.utilsService.hidePageLoader();//hide page loader  
+      this.fetchListing() 
+     })
   }
 
 

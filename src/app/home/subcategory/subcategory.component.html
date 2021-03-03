@@ -1,3 +1,11 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+ <app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+ <!--=================================
+    breadcrumbs and inner-intro -->
+
 <mk-box header="{{formStatus}} Subcategory" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
@@ -31,24 +39,26 @@
           </div>    
   
           <div class="form-group">
-            <input type="file" (change)="fileChangeEvent($event)" />  
-            <p class="text-center" *ngIf="croppedImage.length>0 && imageChangedEvent.length>0">Please Crop Image:</p>
-            <image-cropper
-                [imageChangedEvent]="imageChangedEvent"
-                [maintainAspectRatio]="true"
-                [aspectRatio]="1 / 1"
-                format="jpeg"
-                imageQuality=92
-                (imageCropped)="imageCropped($event)"              
-            ></image-cropper>
-            <p *ngIf="croppedImage.length>0">Cropped Image:</p>
-            <img style="max-width: 400px;" [src]="croppedImage" />
-            
-        </div>
+            <div class="dropzone" [dropzone]="imageUploadconfig"></div> 
+            <i>Valid Types: jpeg/jpg/png/svg.</i>           
+          </div> 
+          <div *ngIf="uploadedImage"><img style="width:100px" src="{{uploadedImage}}"></div>
          
      
             
         </div>
+        
+        <div  class="form-group">
+          <label>Status*</label>
+          <label class="switch">
+            <input type="checkbox" formControlName="is_active" [checked]="(addEditForm.controls.is_active.value)?true:false">
+            <span class="slider round"></span>
+          </label>          
+          <p class="errorCls"  *ngIf="addEditForm.controls.is_active.touched || isFormSubmitted">
+            <app-form-validation-errors errorPrefix="Status " [errors]="addEditForm.get('is_active').errors"></app-form-validation-errors>
+          </p> 
+        </div>
+
         <!-- /.box-body -->
   
         <div class="box-footer">     
@@ -64,14 +74,12 @@
     <div class="box-header">
       <form id="search_Form" [formGroup]="searchForm" (ngSubmit)="onSearch()">
         <div style="width:50%">
-          <h3 class="box-title">Subcategory Listing</h3>     
-          
         </div>
   
         <div class="listing-view">
           <div  class="form-group">    
             <select formControlName="category_id" (change)="onSelectCategory($event)" class="form-control">
-              <option value="">Filter By  Category</option>
+              <option value="">Sort by  Category</option>
               <option *ngFor="let category of categories" value="{{category._id}}">{{category.title}}</option>
             </select>
           </div>
@@ -106,7 +114,8 @@
             <tr>
               <th></th>
               <th>Subcategory</th>
-              <th>Category</th>          
+              <th>Category</th> 
+              <th>Status</th>         
               <th>created At</th>
               <th>Action</th>
             </tr>
@@ -116,14 +125,22 @@
               <td scope="row"><img class="listing-img" src="{{record?.image}}" onerror="this.src='/assets/img/avatar.png'"></td>
          
               <td>{{record?.title}}</td>
-              <td>{{record?.category[0]?.title}}</td>          
+              <td>{{record?.category[0]?.title}}</td>   
+              <td>
+                
+                <label class="switch">
+                  <input type="checkbox" (change)="statusChange($event, record?._id)" [checked]="record?.is_active?true:false">
+                  <span class="slider round"></span>
+                </label>
+
+              </td>        
               <td>{{record?.created_at | date:'MMM dd, y'}}</td>
               <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>
             </tr>          
           </tbody>
           <tbody *ngIf="records.length<=0" >
             <tr>
-              <td style="text-align:center;" colspan="5">No Record Found.</td>
+              <td style="text-align:center;" colspan="5">We can't find any record.</td>
             </tr>
           </tbody>
         </table>
