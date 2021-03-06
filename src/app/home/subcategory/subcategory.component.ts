@@ -17,7 +17,7 @@ import * as Dropzone from 'dropzone';
   styleUrls: ['./subcategory.component.css']
 })
 export class SubcategoryComponent implements OnInit {
-  title: string = 'Subcategory Listing';
+  title: string = 'Subcategories';
   breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Subcategories', link: '' }]
 
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -59,13 +59,13 @@ export class SubcategoryComponent implements OnInit {
       autoReset: null,
       errorReset: null,
       cancelReset: null,
-      //acceptedFiles: '.jpg, .png, .jpeg',
+      acceptedFiles: 'image/*',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div><p>Image thumbnail(300*200)</p></div>', 
+      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div>Subcategory Image</div>', 
      // previewsContainer: "#vehicleImagesPreview",        
       addRemoveLinks: false,
       //createImageThumbnails:false,
-      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
+      dictInvalidFileType: 'Only image file is allowed.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',
       headers: {
         'Cache-Control': null,
@@ -201,6 +201,7 @@ export class SubcategoryComponent implements OnInit {
     this.addEditForm.patchValue({ is_active: true}) 
     
     this.uploadedImage = ''   
+    this.isFormSubmitted= false
     this.isCollapsed = true;    
     this.formStatus = 'Add'
   }
@@ -256,7 +257,6 @@ export class SubcategoryComponent implements OnInit {
       this.isFormSubmitted= true
       return false;      
     }
-    console.log('image',this.addEditForm.get('image').value)
     if(this.addEditForm.get('image').value==null || (this.addEditForm.get('image').value).length<=0){
       Swal.fire({
         icon: 'error',

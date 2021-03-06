@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   APP_NAME:"Mentordex Admin",
-  API_ENDPOINT: 'http://18.218.99.213:3000',
+  API_ENDPOINT: 'http://localhost:3000',
   MESSAGES:{
     "SUCCESSFULLY-LOGOUT":"Loggedout Successfully",
     "CHECKING-AUTHORIZATION":"Checking Authorization",
@@ -27,6 +27,10 @@ export const environment = {
     "DAYTIMESLOT-SUCCESSFULLY-UPDATED":"Slot has been updated successfully.",
     "BANNER-SUCCESSFULLY-SAVED":"New banner has been added successfully.",
     "BANNER-SUCCESSFULLY-UPDATED":"The banner record has been successfully updated.",
+    "OFFICE-SUCCESSFULLY-SAVED":"New office has been added successfully.",
+    "OFFICE-SUCCESSFULLY-UPDATED":"The office record has been successfully updated.",
+    "TEAM-SUCCESSFULLY-SAVED":"New team has been added successfully.",
+    "TEAM-SUCCESSFULLY-UPDATED":"The team record has been successfully updated.",
     
     "FETCHING-RECORD":"Fetching Record Data"
     

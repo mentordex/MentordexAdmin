@@ -9,9 +9,9 @@
 <mk-box header="{{formStatus}} Country" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
-    <a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
+    <!--<a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
         <i class="fa fa-repeat"></i> Reset
-    </a>
+    </a>-->
     
     <!-- Add/Update Record-->
     <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
@@ -39,7 +39,7 @@
         <!-- /.box-body -->
   
         <div class="box-footer">     
-        <button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <!--<button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
         <button type="submit" class="btn btn-primary">{{formStatus}}</button>
         </div>
     </form>
@@ -67,9 +67,9 @@
           </form> 
                     
       </div>
-      <a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
+      <!--<a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
           <i title="Reset Search" class="fa fa-repeat"></i> 
-      </a> 
+      </a> -->
       
     </div>
     

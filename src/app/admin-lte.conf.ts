@@ -22,7 +22,7 @@ export const adminLteConf = {
 
     {label: "FAQ's", iconClasses: 'fa fa-tasks', children: [
       {label: "All FAQ's", route: 'home/faqs'},
-      {label: 'Categories', route: 'faq-category'}
+      {label: 'Categories', route: 'home/faq-category'}
     ]},
 
   

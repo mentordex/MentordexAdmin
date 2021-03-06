@@ -9,9 +9,9 @@
 <mk-box header="{{formStatus}} City" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
-  <a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
+  <!--<a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
       <i class="fa fa-repeat"></i> Reset
-  </a>
+  </a>-->
   
   <!-- Add/Update Record-->
   <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
@@ -23,9 +23,11 @@
               <app-form-validation-errors errorPrefix="City name " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
           </p>  
       </div> 
-      <app-image-upload-dropzone (onImageUploadSuccess)="updateForm($event)"></app-image-upload-dropzone>
-    
-      <div *ngIf="addEditForm.controls.image.value"><img style="width:100px" src="{{addEditForm.controls.image.value}}"></div>
+      <div class="form-group">
+        <div class="dropzone" [dropzone]="imageUploadconfig"></div> 
+        <i>Valid Types: jpeg/jpg/png/svg.</i> 
+        <div *ngIf="uploadedImage"><img style="width:100px" src="{{uploadedImage}}"></div>          
+      </div> 
       <div  class="form-group zipcode-width">
         <label>Zip codes*</label>
         <tag-input formControlName="zipcodes" inputClass="zipcode-width"  (onRemove)="onZipcodeRemoved($event)" (onAdd)="onAddZipcode($event)" [modelAsStrings]="true" [secondaryPlaceholder]="'Enter the zip code. Only 1 zip code is required.'" [placeholder]="'Enter More+'"></tag-input>
@@ -75,7 +77,7 @@
       <!-- /.box-body -->
 
       <div class="box-footer">     
-      <button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <!--<button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
       <button type="submit" class="btn btn-primary">{{formStatus}}</button>
       </div>
   </form>
@@ -122,9 +124,9 @@
     
       
     </form> 
-    <a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
+ <!--<a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
         <i title="Reset Search" class="fa fa-repeat"></i> 
-    </a> 
+    </a> -->
     
 </div>
 <!-- /.box-header -->

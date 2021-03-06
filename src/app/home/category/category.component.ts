@@ -17,7 +17,7 @@ import * as Dropzone from 'dropzone';
   styleUrls: ['./category.component.css']
 })
 export class CategoryComponent implements OnInit {
-  title: string = 'Category Listing';
+  title: string = 'Categories';
   breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Categories', link: '' }]
 
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -55,13 +55,13 @@ export class CategoryComponent implements OnInit {
       autoReset: null,
       errorReset: null,
       cancelReset: null,
-      //acceptedFiles: '.jpg, .png, .jpeg',
+      acceptedFiles: 'image/*',
       maxFilesize: 2, // MB,
-      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div><p>Image thumbnail(300*200)</p></div>', 
+      dictDefaultMessage: '<div class="portfolio_upload"><div class="icon"><span class="flaticon-download"></span></div>Category Image</div>', 
      // previewsContainer: "#vehicleImagesPreview",        
       addRemoveLinks: false,
       //createImageThumbnails:false,
-      dictInvalidFileType: 'Only valid jpeg, jpg, png file is accepted.',
+      dictInvalidFileType: 'Only image file is allowed.',
       dictFileTooBig: 'Maximum upload file size limit is 2MB',
       headers: {
         'Cache-Control': null,
@@ -155,6 +155,7 @@ export class CategoryComponent implements OnInit {
     this.isCollapsed = true;   
     this.uploadedImage = ''
     this.formStatus = 'Add'
+    this.isFormSubmitted= false
   }
 
   resetSearch(){
@@ -206,7 +207,7 @@ export class CategoryComponent implements OnInit {
       this.isFormSubmitted= true
       return false;      
     }
-    if(this.addEditForm.get('image').value == null){
+    if(this.addEditForm.get('image').value==null || (this.addEditForm.get('image').value).length<=0){
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -220,7 +221,10 @@ export class CategoryComponent implements OnInit {
       
       this.ngZone.run(() => {
         this.uploadedImage = ''
+        this.isCollapsed = false;
+        this.isCollapsed = true;
       });
+      
       this.cancelEdit()
       this.fetchListing()
     })

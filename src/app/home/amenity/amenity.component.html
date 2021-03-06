@@ -1,9 +1,9 @@
 <mk-box header="{{formStatus}} FAQ" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
    
       
-        <a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
+        <!--<a style="float: right;" *ngIf="formStatus=='Update'" (click)="cancelEdit()">
             <i class="fa fa-repeat"></i> Reset
-        </a>
+        </a>-->
         
         <!-- Add/Update Record-->
         <form [formGroup]="amenityForm" (ngSubmit)="onSubmit()">
@@ -49,7 +49,7 @@
             <!-- /.box-body -->
     
             <div class="box-footer">     
-            <button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <!--<button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
             <button type="submit" class="btn btn-primary">{{formStatus}}</button>
             </div>
         </form>

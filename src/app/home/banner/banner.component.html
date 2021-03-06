@@ -30,8 +30,11 @@
               <app-form-validation-errors errorPrefix="Desctiption " [errors]="addEditForm.get('description').errors"></app-form-validation-errors>
           </p>  
       </div> 
-      <app-image-upload-dropzone (onImageUploadSuccess)="updateForm($event)"></app-image-upload-dropzone>
-    <div *ngIf="addEditForm.controls.image.value"><img style="width:100px" src="{{addEditForm.controls.image.value}}"></div>
+      <div class="form-group">
+        <div class="dropzone" [dropzone]="imageUploadconfig"></div> 
+        <i>Valid Types: jpeg/jpg/png/svg.</i> 
+        <div *ngIf="uploadedImage"><img style="width:100px" src="{{uploadedImage}}"></div>          
+      </div> 
       <div class="form-group">
           <label>Button Text*</label>
           <input formControlName="button_text" type="input" class="form-control" type="text" placeholder="Enter button text">  
@@ -83,7 +86,7 @@
       <!-- /.box-body -->
 
       <div class="box-footer">     
-      <button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <!--<button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
       <button type="submit" class="btn btn-primary">{{formStatus}}</button>
       </div>
   </form>

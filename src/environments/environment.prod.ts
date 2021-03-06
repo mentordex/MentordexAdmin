@@ -20,7 +20,13 @@ export const environment = {
     "CITY-SUCCESSFULLY-SAVED":"New city has been added successfully.",
     "CITY-SUCCESSFULLY-UPDATED":"The city record has been successfully updated.",
     "DAYTIMESLOT-SUCCESSFULLY-SAVED":"Slot has been added successfully.",
-    "DAYTIMESLOT-SUCCESSFULLY-UPDATED":"Slot has been updated successfully."
+    "DAYTIMESLOT-SUCCESSFULLY-UPDATED":"Slot has been updated successfully.",
+    "BANNER-SUCCESSFULLY-SAVED":"New banner has been added successfully.",
+    "BANNER-SUCCESSFULLY-UPDATED":"The banner record has been successfully updated.",
+    "OFFICE-SUCCESSFULLY-SAVED":"New office has been added successfully.",
+    "OFFICE-SUCCESSFULLY-UPDATED":"The office record has been successfully updated.",
+    "TEAM-SUCCESSFULLY-SAVED":"New team has been added successfully.",
+    "TEAM-SUCCESSFULLY-UPDATED":"The team record has been successfully updated.",
   }
 };
 
