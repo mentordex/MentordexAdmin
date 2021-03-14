@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BoxModule, TabsModule, DropdownModule } from 'angular-admin-lte';
 import { ToastrModule } from 'ng6-toastr-notifications';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { NgxMaskModule, IConfig } from 'ngx-mask'
@@ -36,9 +37,10 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
     ImageCropperModule,
     NgxMaskModule.forRoot(),
     DropzoneModule,
-    TagInputModule
+    TagInputModule,
+    BsDatepickerModule.forRoot()
   ],
   declarations: [HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, BreadcrumbsComponent],
-  exports: [ ImageCropperModule, NgxPaginationModule, NgxDatatableModule, ToastrModule, BoxModule, TabsModule, HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, NgxMaskModule, DropzoneModule, TagInputModule, BreadcrumbsComponent]
+  exports: [BsDatepickerModule, ImageCropperModule, NgxPaginationModule, NgxDatatableModule, ToastrModule, BoxModule, TabsModule, HeaderInnerComponent, SidebarLeftInnerComponent, SidebarRightInnerComponent,FormValidationErrorsComponent, PageLoaderComponent, FirstLetterCapitalPipe, NgxMaskModule, DropzoneModule, TagInputModule, BreadcrumbsComponent]
 })
 export class CoreModule { }

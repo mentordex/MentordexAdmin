@@ -7,14 +7,10 @@ import { HomeRoutingModule } from './home-routing.module';
 import { AdminsComponent } from './admins/admins.component';
 import { UsersComponent } from './users/users.component';
 import { CategoryComponent } from './category/category.component';
-import { NeighbourhoodComponent } from './neighbourhood/neighbourhood.component';
-import { PropertyTypeComponent } from './property-type/property-type.component';
-import { PropertyComponent } from './property/property.component';
 import { AmenityComponent } from './amenity/amenity.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
-import { ViewPropertyComponent } from './view-property/view-property.component';
 import { OfficesComponent } from './offices/offices.component';
 import { TeamsComponent } from './teams/teams.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
@@ -29,7 +25,7 @@ import { BannerComponent } from './banner/banner.component';
 
 
 @NgModule({
-  declarations: [AdminsComponent, UsersComponent, CategoryComponent, NeighbourhoodComponent, PropertyTypeComponent, PropertyComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, ViewPropertyComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent, CountryComponent, StateComponent, CityComponent, ImageUploadDropzoneComponent, AppointmentComponent, SlotsComponent, BannerComponent],
+  declarations: [AdminsComponent, UsersComponent, CategoryComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent, CountryComponent, StateComponent, CityComponent, ImageUploadDropzoneComponent, AppointmentComponent, SlotsComponent, BannerComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

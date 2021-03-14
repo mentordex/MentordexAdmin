@@ -4,14 +4,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminsComponent } from './admins/admins.component';
 import { UsersComponent } from './users/users.component';
 import { CategoryComponent } from './category/category.component';
-import { NeighbourhoodComponent } from './neighbourhood/neighbourhood.component';
-import { PropertyTypeComponent } from './property-type/property-type.component';
-import { PropertyComponent } from './property/property.component';
 import { AmenityComponent } from './amenity/amenity.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { ProfileComponent } from './profile/profile.component';
-import { ViewPropertyComponent } from './view-property/view-property.component';
 import { OfficesComponent } from './offices/offices.component';
 import { TeamsComponent } from './teams/teams.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
@@ -64,33 +60,6 @@ const routes: Routes = [
     component: SubcategoryComponent,   
     data: { title: 'Subcategory Listing' }
   },
-
-  {
-    path: 'neighbourhood',
-    component: NeighbourhoodComponent,   
-    data: { title: 'Neighbourhoods Listing' }
-  },
-  {
-    path: 'neighbourhood/:cityID',
-    component: NeighbourhoodComponent,   
-    data: { title: 'Neighbourhoods Listing' }
-  },
-  {
-    path: 'property-type',
-    component: PropertyTypeComponent,   
-    data: { title: 'Property Types Listing' }
-  },
-  {
-    path: 'property/:userID/:status',
-    component: PropertyComponent,   
-    data: { title: 'Property Listing' }
-  },
- 
-  {
-    path: 'property',
-    component: PropertyComponent,   
-    data: { title: 'Property Listing' }
-  },
   {
     path: 'faqs',
     component: AmenityComponent,   
@@ -106,12 +75,7 @@ const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,   
     data: { title: 'Admin Profile' }
-  },
-  {
-    path: 'property-view/:propertyID',
-    component: ViewPropertyComponent,   
-    data: { title: 'Property Details' }
-  },
+  }, 
   {
     path: 'offices',
     component: OfficesComponent,   

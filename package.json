@@ -55,6 +55,7 @@
     "ionicons": "^2.0.1",
     "jquery": "^3.5.1",
     "ng6-toastr-notifications": "^1.0.4",
+    "ngx-bootstrap": "^6.2.0",
     "ngx-chips": "^2.2.2",
     "ngx-dropzone": "^2.2.2",
     "ngx-dropzone-wrapper": "^10.0.1",

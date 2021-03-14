@@ -10,11 +10,16 @@
     <div class="box-header">
      
       <!--Tabs-->
-    <div style="width:40%" class="nav-tabs-custom">
+    <div style="width:80%" class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="javascript:void()">New</a></li>
-        <li><a  href="#tab_2" href="javascript:void()">Approved</a></li>
-        <li><a  href="#tab_3" href="javascript:void()">Rescheduled</a></li>
+        <li [ngClass]="{'active': status == ''}"><a href="javascript:void()" (click)="appointments('ALL')">All <span *ngIf="status=='ALL'" class="badge badge-info right">{{this.totalRecords}}</span> </a></li>
+        <li [ngClass]="{'active': status == 'NEW'}"><a href="javascript:void()" (click)="appointments('NEW')">New <span *ngIf="status=='NEW'" class="badge badge-info right">{{this.totalRecords}}</span> </a></li>
+        <li [ngClass]="{'active': status == 'IN-PROCESS'}"><a  href="#tab_2" href="javascript:void()" (click)="appointments('IN-PROCESS')">In Process <span *ngIf="status=='IN-PROCESS'" class="badge badge-info right">{{this.totalRecords}}</span> </a></li>
+        <li [ngClass]="{'active': status == 'APPROVED'}"><a  href="#tab_2" href="javascript:void()" (click)="appointments('APPROVED')">Approved <span *ngIf="status=='APPROVED'" class="badge badge-info right">{{this.totalRecords}}</span> </a></li>
+        <li [ngClass]="{'active': status == 'REJECTED'}"><a  href="#tab_2" href="javascript:void()" (click)="appointments('REJECTED')">Rejected <span *ngIf="status=='REJECTED'" class="badge badge-info right">{{this.totalRecords}}</span> </a></li>
+        <li [ngClass]="{'active': status == 'RESCHEDULED'}"><a  href="#tab_3" href="javascript:void()" (click)="appointments('RESCHEDULED')">Rescheduled <span *ngIf="status=='RESCHEDULED'" class="badge badge-info right">{{this.totalRecords}}</span> </a></li>
+        
+        
       </ul>
     </div>
     <!--Ends Here-->
@@ -26,14 +31,59 @@
         </div>
 
         <div class="box-tools search_box">        
-          <div class="input-group input-group-sm hidden-xs" style="width: 250px;">
-              <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Title">
+          <div class="input-group input-group-sm hidden-xs">
+            
+            <div class="row">   
+            <div class="form-group col-md-3">                          
+              <input type="text"
+              class="form-control"
+              #dp1="bsDatepicker"
+              placeholder="From"
+              readonly
+              bsDatepicker
+              (bsValueChange)="onFromDateChange($event)"
+              [bsConfig]="{ showWeekNumbers:false, isAnimated: true, containerClass: 'theme-blue' }"
+             
+              formControlName="from"
+              [maxDate]="maxSearchDate"
+              >
+              <p class="errorCls"  *ngIf="searchForm.controls.from.touched || isSearchFormSubmitted">
+                <app-form-validation-errors errorPrefix="From Date " [errors]="searchForm.get('from').errors"></app-form-validation-errors>
+            </p>
+              
+            </div> 
+            <div class="form-group col-md-3">                          
+              <input type="text"
+              class="form-control"
+              formControlName="to"
+              readonly
+              placeholder="To"
+              #dp1="bsDatepicker"
+              bsDatepicker
+              (bsValueChange)="onToDateChange($event)"
+              [bsConfig]="{ showWeekNumbers:false, isAnimated: true, containerClass: 'theme-blue' }"
+              [minDate]="fromDate"
+              
+              >
+              <p class="errorCls"  *ngIf="searchForm.controls.to.touched || isSearchFormSubmitted">
+                <app-form-validation-errors errorPrefix="To Date " [errors]="searchForm.get('to').errors"></app-form-validation-errors>
+            </p>
+              
+            </div> 
+            <div class="form-group col-md-4">  
+              <input formControlName="search" (change)="onChangeSearch()" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Name">
               <p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
-                  <app-form-validation-errors errorPrefix="Title " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
+                <app-form-validation-errors errorPrefix="Title " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
               </p>
-              <div class="input-group-btn">
-              <button type="submit" class="btn btn-default search_btn"><i class="fa fa-search"></i></button>
               </div>
+              <div class="form-group col-md-2">  
+                <button type="submit" class="btn btn-default">Search</button>
+              </div>
+          </div>
+         
+            
+              
+             
           </div>
                 
         </div>
@@ -42,9 +92,9 @@
     
       
     </form> 
-    <a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
+    <!--<a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
         <i title="Reset Search" class="fa fa-repeat"></i> 
-    </a>
+    </a>-->
       
     </div>
     <!-- /.box-header -->
@@ -56,9 +106,8 @@
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Date Time</th> 
-                <th>Status</th>                        
-                <th>Created On</th>
-                <th>Updated On</th>       
+                <th>created</th> 
+                <th>Status</th>  
                 <th>Action</th>
             </tr>
           </thead>
@@ -66,21 +115,14 @@
             <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: 10, currentPage: pagination.pageNumber, totalItems: totalRecords }">
               
          
-              <td>{{record?.name}}</td>
+              <td>{{record?.first_name}}</td>
               <td>{{record?.email}}</td>
               <td>{{record?.phone}}</td>
-              <td>{{record?.date_time}}</td>
-              <td>
-                
-                <label class="switch">
-                  <input type="checkbox" (change)="statusChange($event, record?._id)" [checked]="record?.is_active?true:false">
-                  <span class="slider round"></span>
-                </label>
-  
-              </td>
-              <td>{{record?.created_at}}</td>
-              <td>{{record?.modified_at}}</td>
-              <td><a title="Edit Record" href="javascript:void(0)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)"><i class="fa fa-fw fa-remove"></i></a></td>
+              <td>{{record?.appointment_date}}&nbsp;{{record?.appointment_time}}</td>
+              <td>{{record.created_at | date:'MMM dd, y'}}</td>
+              <td>{{record.admin_status}}</td>
+             
+              <td><a title="View Mentor Information" (click)="showMentorInfo(record)" href="javascript:void(0)"><i class="fa fa-fw fa-eye"></i></a></td>
             </tr>          
           </tbody>
           <tbody *ngIf="records.length<=0" >
@@ -95,3 +137,250 @@
     
       
   </mk-box>
+
+  <div class="modal" id="bmodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog"  role="document">
+      <div class="modal-content">
+        <h5 class="modal-title" style="text-align:center">Mentor Information</h5>
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="row">
+            <div class="card card-primary card-outline card-outline-tabs">
+              <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                  <li class="nav-item active">
+                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Basic Details</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Skills</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Slots</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Notes</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-four-tabContent">
+                  <div class="tab-pane active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Gender: {{(mentorInfo?.gender | firstLetterCapital)|| 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Primary Language: <span *ngFor="let language of mentorInfo?.primary_language">{{language.value}},&nbsp;</span></p> 
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Address1: {{mentorInfo?.address1 || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Address2: {{mentorInfo?.address2 || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Country: {{(mentorInfo?.country[0]?.title) || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">State:  {{(mentorInfo?.state[0]?.title) || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">City:  {{(mentorInfo?.city[0]?.title) || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Zipcode: {{mentorInfo?.zipcode || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">DOB: {{mentorInfo?.dob?.day}}-{{mentorInfo?.dob?.month}}-{{mentorInfo?.dob?.year}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Social Links:  
+                          <span *ngIf="mentorInfo?.social_links?.linkedin_url">
+                            <a taregt="_blank" [href]="mentorInfo?.social_links?.linkedin_url">Linkedin</a>&nbsp;
+                          </span>
+                          <span *ngIf="mentorInfo?.social_links?.twitter_url">
+                            <a taregt="_blank" [href]="mentorInfo?.social_links?.twitter_url">Twitter</a>&nbsp;
+                          </span>
+                          <span *ngIf="mentorInfo?.social_links?.instagram_url"><a taregt="_blank" [href]="mentorInfo?.social_links?.instagram_url">Instagram</a>&nbsp;</span
+                          >
+                        </p> 
+                      </div>
+                      
+                    </div>
+                  
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Category:  {{(mentorInfo?.category[0]?.title) || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Subcategories: {{mentorInfo?.subcategories || 'N/A'}}</p> 
+                      </div>
+                    </div> 
+                    <div class="row">
+                      <div class="col-md-12">
+                        <label>Letter Of Recommendation:</label>
+                        <div class="form-group">
+                          <div class="col-md-2"  *ngFor="let recommendation of mentorInfo?.letter_of_recommendation">
+                            <a target="_blank" href="{{recommendation.file_path}}"><img src="/assets/img/pdf.png"></a>
+
+                          </div>
+                          <div class="col-md-12"  *ngIf="mentorInfo?.letter_of_recommendation?.length<=0"> We can't find any record</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Appointment Date:  {{mentorInfo?.appointment_date}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Appointment Time:  {{mentorInfo?.appointment_time}}</p>
+                      </div>
+                      
+                    </div> 
+                    
+                    <div class="row">
+                      <div class="col-md-12">
+                       
+                        <label>References:</label>
+                        <div class="form-group" *ngFor="let reference of mentorInfo?.references">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Name:  {{reference?.name || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Email: {{reference?.email || 'N/A'}}</p> 
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Work Place:  {{reference?.workplace_name || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Job Title: {{reference?.job_title || 'N/A'}}</p> 
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Relation:  {{reference?.relation || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Contact: {{reference?.contact_number || 'N/A'}}</p> 
+                            </div>
+                          </div>
+                        </div>
+                      </div>                      
+                    </div> 
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
+                    <div class="row">
+                      <div class="col-md-{{(mentorInfo?.admin_status!='APPROVED')?6:12}}" style="
+                    
+                      max-height: 400px; 
+                      overflow: auto;">
+                        <label>Added Notes:</label>
+                        <div class="form-group" *ngFor="let note of mentorInfo?.notes">
+                          
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Note:  {{note.notes}}</p> 
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Appointment Date:  {{note?.appointment_date || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Appointment Time: {{note?.appointment_time || 'N/A'}}</p> 
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Updated On:  {{note?.created_at | date:'MMM dd, y'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Status: {{(note?.status | firstLetterCapital) || 'N/A'}}</p> 
+                            </div>
+                          </div>                           
+                        
+                        <div class="form-group" *ngIf="mentorInfo?.notes.length<=0">
+                          We can't find any record
+                        </div>
+                      </div>
+                    </div>
+                      <div *ngIf="mentorInfo?.admin_status!='APPROVED'" class="col-md-6">
+                        <form [formGroup]="bookASlotForm" (ngSubmit)="onSubmit()">
+                          <div class="box-body"> 
+                            <div class="form-group">                          
+                              <select formControlName="status" class="form-control" (change)="onChangeStatus()">
+                                <option value="">Status*</option>
+                                <option value="NEW">New</option>
+                                <option value="APPROVED">Approved</option>
+                                <option value="RESCHEDULED">Rescheduled</option>
+                                <option value="IN-PROCESS">In Process</option>
+                                <option value="REJECTED">Rejected</option>
+                                <option value="PENDING">Pending</option>
+                              </select>
+                            </div>
+                     
+                            <div class="form-group">
+                              
+                              <textarea formControlName="notes" class="form-control" placeholder="Enter Notes"></textarea>
+                              
+                              <p class="errorCls"  *ngIf="bookASlotForm.controls.notes.touched || isFormSubmitted">
+                                <app-form-validation-errors errorPrefix="Notes " [errors]="bookASlotForm.get('notes').errors"></app-form-validation-errors>
+                              </p> 
+                            </div>
+                            <div *ngIf="bookASlotForm.get('status').value =='RESCHEDULED'" class="row">
+                              <div class="form-group col-md-6">                          
+                                <input type="text"
+                                class="form-control"
+                                #dp="bsDatepicker"
+                                bsDatepicker
+                                (bsValueChange)="onDateChange($event)"
+                                [bsConfig]="{ showWeekNumbers:false, isAnimated: true, containerClass: 'theme-blue' }"
+                                [minDate]="minDate" [maxDate]="maxDate"
+                                [bsValue]="minDate">
+                                
+                              </div> 
+                              <div class="form-group col-md-6">                         
+                                <select formControlName="appointment_time" class="form-control">
+                                  <option value="">Available Time</option>
+                                  <option *ngFor="let availableSlot of getAvailableSlots;" value="{{availableSlot.slot}}">{{availableSlot?.slot}}</option>
+                                </select>
+                                <p class="errorCls"  *ngIf="bookASlotForm.controls.appointment_time.touched || isFormSubmitted">
+                                  <app-form-validation-errors errorPrefix="Available Time " [errors]="bookASlotForm.get('appointment_time').errors"></app-form-validation-errors>
+                                </p>  
+                              </div>                            
+                            </div> 
+                            <button type="submit" class="btn btn-primary">Update</button>
+                          </div>
+                          
+                        
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>

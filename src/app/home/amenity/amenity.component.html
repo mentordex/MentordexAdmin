@@ -77,9 +77,9 @@
                   <div class="box-tools search_box">        
                     <div class="input-group input-group-sm hidden-xs" style="width: 250px;">
                         <input formControlName="search" type="text" name="table_search" class="form-control pull-left searchbar_input" placeholder="Search By Question">
-                        <p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
+                        <!--<p class="errorCls"  *ngIf="searchForm.controls.search.touched || isSearchFormSubmitted">
                             <app-form-validation-errors errorPrefix="Title " [errors]="searchForm.get('search').errors"></app-form-validation-errors>
-                        </p>
+                        </p>-->
                         <div class="input-group-btn">
                         <button type="submit" class="btn btn-default search_btn"><i class="fa fa-search"></i></button>
                         </div>
