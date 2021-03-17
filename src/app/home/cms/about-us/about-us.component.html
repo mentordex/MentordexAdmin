@@ -1,0 +1,127 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+ <app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+ <!--=================================
+    breadcrumbs and inner-intro -->
+
+<mk-box header="Manage About Us" [isCollapsed]="false" [isCollapsable]="false" [isRemovable]="false">
+     
+    <!-- Add/Update Record-->
+    <form [formGroup]="addEditForm" (ngSubmit)="onSubmit()">
+        <div class="box-body">  
+            <div class="row">
+                <div class="form-group">
+                    <label>Title*</label>
+                    <input formControlName="title_1" class="form-control" type="text" placeholder="Title">  
+                    <p class="errorCls"  *ngIf="addEditForm.controls.title_1.touched || isFormSubmitted">
+                    <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title_1').errors"></app-form-validation-errors>
+                    </p>          
+                </div>        
+                <div class="form-group">
+                    <label>Description*</label>
+                    <textarea formControlName="description_1" class="form-control" placeholder="Enter Description"></textarea>  
+                    <p class="errorCls"  *ngIf="addEditForm.controls.description_1.touched || isFormSubmitted">
+                        <app-form-validation-errors errorPrefix="Description " [errors]="addEditForm.get('description_1').errors"></app-form-validation-errors>
+                    </p>          
+                </div>
+                <div class="form-group">
+                    <label>Small Description*</label>
+                    <textarea formControlName="small_description_1" class="form-control" type="text" placeholder="Enter Small Description"></textarea>
+                    <p class="errorCls"  *ngIf="addEditForm.controls.small_description_1.touched || isFormSubmitted">
+                    <app-form-validation-errors errorPrefix="Small Description " [errors]="addEditForm.get('small_description_1').errors"></app-form-validation-errors>
+                    </p>          
+                </div>          
+    
+                <div class="form-group">
+                    <div class="dropzone" [dropzone]="imageUploadconfig1"></div> 
+                    <i>Valid Types: jpeg/jpg/png/svg.</i> 
+                    <div *ngIf="uploadedImage1"><img style="width:100px" src="{{uploadedImage1}}"></div>          
+                </div>
+            </div>  
+            
+            <div class="row">
+                <div class="form-group">
+                    <label>Title*</label>
+                    <input formControlName="title_2" class="form-control" type="text" placeholder="Title">  
+                    <p class="errorCls"  *ngIf="addEditForm.controls.title_2.touched || isFormSubmitted">
+                    <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title_2').errors"></app-form-validation-errors>
+                    </p>          
+                </div>        
+                <div class="form-group">
+                    <label>Description*</label>
+                    <textarea formControlName="description_2" class="form-control" placeholder="Enter Description"></textarea>
+                    <p class="errorCls"  *ngIf="addEditForm.controls.description_2.touched || isFormSubmitted">
+                        <app-form-validation-errors errorPrefix="Description " [errors]="addEditForm.get('description_2').errors"></app-form-validation-errors>
+                    </p>          
+                </div>
+                       
+    
+                <div class="form-group">
+                    <div class="dropzone" [dropzone]="imageUploadconfig2"></div> 
+                    <i>Valid Types: jpeg/jpg/png/svg.</i> 
+                    <div *ngIf="uploadedImage2"><img style="width:100px" src="{{uploadedImage2}}"></div>          
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Title*</label>
+                    <input formControlName="title_3" class="form-control" type="text" placeholder="Title">  
+                    <p class="errorCls"  *ngIf="addEditForm.controls.title_3.touched || isFormSubmitted">
+                    <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title_3').errors"></app-form-validation-errors>
+                    </p>          
+                </div>        
+                <div class="form-group">
+                    <label>Description*</label>
+                    <textarea formControlName="description_3" class="form-control" placeholder="Enter Description"></textarea> 
+                    <p class="errorCls"  *ngIf="addEditForm.controls.description_3.touched || isFormSubmitted">
+                        <app-form-validation-errors errorPrefix="Description " [errors]="addEditForm.get('description_3').errors"></app-form-validation-errors>
+                    </p>          
+                </div>
+                       
+    
+                <div class="form-group">
+                    <div class="dropzone" [dropzone]="imageUploadconfig3"></div> 
+                    <i>Valid Types: jpeg/jpg/png/svg.</i> 
+                    <div *ngIf="uploadedImage3"><img style="width:100px" src="{{uploadedImage3}}"></div>          
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="form-group">
+                    <label>Title*</label>
+                    <input formControlName="title_4" class="form-control" type="text" placeholder="Title">  
+                    <p class="errorCls"  *ngIf="addEditForm.controls.title_4.touched || isFormSubmitted">
+                    <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title_4').errors"></app-form-validation-errors>
+                    </p>          
+                </div>        
+                <div class="form-group">
+                    <label>Description*</label>
+                    <textarea formControlName="description_4" class="form-control" placeholder="Enter Description"></textarea> 
+                    <p class="errorCls"  *ngIf="addEditForm.controls.description_4.touched || isFormSubmitted">
+                        <app-form-validation-errors errorPrefix="Description " [errors]="addEditForm.get('description_4').errors"></app-form-validation-errors>
+                    </p>          
+                </div>
+                        
+    
+                <div class="form-group">
+                    <div class="dropzone" [dropzone]="imageUploadconfig4"></div> 
+                    <i>Valid Types: jpeg/jpg/png/svg.</i> 
+                    <div *ngIf="uploadedImage4"><img style="width:100px" src="{{uploadedImage4}}"></div>          
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+  
+        <div class="box-footer">     
+        <!--<button  type="button" (click)="cancelEdit()" class="btn btn-default">Cancel</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+        <button type="submit" class="btn btn-primary">Add/Update Content</button>
+        </div>
+    </form>
+    <!-- End Here-->
+</mk-box>
+  

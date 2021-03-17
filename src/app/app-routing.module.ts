@@ -26,6 +26,14 @@ const routes: Routes = [
         data: {
           customLayout: false
         }
+      },
+      {
+        path: 'cms',
+        canActivate: [AdminAuthGuardService], 
+        loadChildren: () => import('./home/cms/cms.module').then(m => m.CmsModule),
+        data: {
+          customLayout: false
+        }
       },    
     ]
   }, 

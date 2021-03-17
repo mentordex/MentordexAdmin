@@ -25,10 +25,16 @@ export const adminLteConf = {
       {label: 'Categories', route: 'home/faq-category'}
     ]},
 
+
   
     {label: `Office Listings`, route: 'home/offices', iconClasses: 'fa fa-tasks'},
     {label: `Team Listings`, route: 'home/team', iconClasses: 'fa fa-tasks'},   
-    {label: `Banner Listings`, route: 'home/banners', iconClasses: 'fa fa-tasks'},    
+    {label: `Banner Listings`, route: 'home/banners', iconClasses: 'fa fa-tasks'}, 
+      
+    {label: "CMS", iconClasses: 'fa fa-tasks', children: [
+      {label: "About Us", route: 'cms/about-us'}
+    ]},
+
     {label: 'Other Actions', separator: true},
     {label: 'Profile', route: 'home/profile', iconClasses: 'fa fa-tasks'},
     {label: 'Change Password', route: 'home/change-password', iconClasses: 'fa fa-tasks'},
