@@ -1,10 +1,16 @@
+<!--=================================
+ breadcrumbs and inner-intro -->
+
+ <app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
+
+ <!--=================================
+    breadcrumbs and inner-intro -->
 
 <mk-box [isLoading]="isLoading"  [isCollapsable]="false" [isRemovable]="false">
   <div class="box-header">
-    <h3 class="box-title">User Listing</h3>
 
     <!--Tabs-->
-    <div style="width:23%" class="nav-tabs-custom">
+    <div style="width:30%" class="nav-tabs-custom">
       <ul class="nav nav-tabs">
         <li [ngClass]="{'active':selectedTab==''}"><a (click)="changeTab('')" href="javascript:void()">All</a></li>
         <li [ngClass]="{'active':selectedTab=='PARENT'}"><a (click)="changeTab('PARENT')" href="#tab_2" href="javascript:void()">Parents</a></li>
@@ -56,12 +62,14 @@
           <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: pagination.size, currentPage: pagination.pageNumber, totalItems: totalRecords }">
             <td scope="row"><img class="listing-img" src="{{record?.profile_pic}}" onerror="this.src='assets/img/avatar.png'"></td>
        
-            <td>{{record?.name}}</td>
+            <td>{{record?.first_name}}</td>
             <td>{{record?.email}}</td>
             <td>{{record?.role |  firstLetterCapital}}</td>   
             <td>{{record?.is_active | firstLetterCapital}}</td>
             <td>{{record?.created_at | date:'MMM dd, y'}}</td>
             <td>
+              <a title="View Mentor Information" (click)="showUserInfo(record)" href="javascript:void(0)"><i class="fa fa-fw fa-eye"></i></a>
+
              <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a>
 
               | <a *ngIf="record.is_active=='INACTIVE'" title="Unlock User: Enable Login Permission" href="javascript:void(0)" (click)="changeStatus(record,'ACTIVE')"><i class="fa fa-fw fa-unlock-alt"></i></a>
@@ -78,8 +86,393 @@
         </tbody>
       </table>
     </div>
-      <pagination-controls style="text-align:right" id="listing"  (pageChange)="nextpage($event)"></pagination-controls>
-      
-  
-    
+      <pagination-controls style="text-align:right" id="listing"  (pageChange)="nextpage($event)"></pagination-controls>     
   </mk-box>
+
+  <div class="modal" id="mentorinfoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog"  role="document">
+      <div class="modal-content">
+        <h5 class="modal-title" style="text-align:center">Mentor Information</h5>
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="row">
+            <div class="card card-primary card-outline card-outline-tabs">
+              <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                  <li class="nav-item active">
+                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Basic Details</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Academics</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Employment</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Achievements</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-four-tabContent">
+                  <div class="tab-pane active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="d-inline-block">Profile Image:  </p> 
+                      </div>                      
+                      
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="d-inline-block">Bio:  {{userInfo?.bio || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-12">
+                        <p class="d-inline-block">Tagline:  {{userInfo?.tagline || 'N/A'}}</p>
+                      </div>
+                      <div class="col-md-12">
+                        <p class="d-inline-block">Hourly Rate:  ${{userInfo?.hourly_rate || '0'}}/hr</p>
+                      </div>
+                      <div class="col-md-12">
+                        <p class="d-inline-block">Website:  {{userInfo?.website || 'N/A'}}/hr</p>
+                      </div>
+
+                      <div class="col-md-12">
+                        <p class="d-inline-block">Social Links:  
+                          <span *ngIf="userInfo?.social_links?.linkedin_url">
+                            <a taregt="_blank" [href]="userInfo?.social_links?.linkedin_url">Linkedin</a>&nbsp;
+                          </span>
+                          <span *ngIf="userInfo?.social_links?.twitter_url">
+                            <a taregt="_blank" [href]="userInfo?.social_links?.twitter_url">Twitter</a>&nbsp;
+                          </span>
+                          <span *ngIf="userInfo?.social_links?.instagram_url"><a taregt="_blank" [href]="userInfo?.social_links?.instagram_url">Instagram</a>&nbsp;</span
+                          >
+                        </p>
+                      </div>
+
+                      
+                      
+                    </div>
+                  
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                       
+                        <div class="form-group" *ngFor="let academic of userInfo?.academics">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Institution Name:  {{academic?.institution_name || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Grade: {{academic?.grade || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Area Of Study:  {{academic?.area_of_study || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Degree: {{academic?.degree || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                      
+                        <div class="form-group" *ngFor="let employment of userInfo?.employments">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Company:  {{employment?.company || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Title: {{academic?.title || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Description:  {{employment?.description || 'N/A'}}</p> 
+                            </div>                            
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">City: {{employment?.city || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">State:  {{employment?.state || 'N/A'}}</p> 
+                            </div>                            
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Start Year: {{employment?.start_year || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">End Year: {{employment?.end_year || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                     
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                       
+                        <div class="form-group" *ngFor="let achievement of userInfo?.achievements">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Title:  {{achievement?.title || 'N/A'}}</p> 
+                            </div>                            
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Description:  {{achievement?.description || 'N/A'}}</p> 
+                            </div>                            
+                          </div>  
+                          
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Associated With: {{achievement?.associated_with || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Years of Learning: {{achievement?.years_of_learning || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Start Year: {{achievement?.start_year || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">End Year: {{achievement?.end_year || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                          <div class="row">                            
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Issuer: {{achievement?.issuer || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                          
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="parentinfoModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog"  role="document">
+      <div class="modal-content">
+        <h5 class="modal-title" style="text-align:center">Parent Information</h5>
+        <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <div class="row">
+            <div class="card card-primary card-outline card-outline-tabs">
+              <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                  <li class="nav-item active">
+                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Basic Details</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Payment & Billing</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body">
+                <div class="tab-content" id="custom-tabs-four-tabContent">
+                  <div class="tab-pane active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                    
+                    <div class="row">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Name:  {{userInfo?.first_name || 'N/A'}}</p> 
+                        </div>
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Email: {{userInfo?.email || 'N/A'}}</p> 
+                        </div>
+                      </div>
+                      <!--<div class="row">
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Category 1:  {{userInfo?.category1[0]?.title || 'N/A'}}</p> 
+                        </div>
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Subcategory 1: {{userInfo?.subcategory1[0]?.title || 'N/A'}}</p> 
+                        </div>
+                      </div>
+                      
+                      <div class="row">
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Category 2:  {{userInfo?.category2[0]?.title || 'N/A'}}</p> 
+                        </div>
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Subcategory 2: {{userInfo?.subcategory2[0]?.title || 'N/A'}}</p> 
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Category 3:  {{userInfo?.category3[0]?.title || 'N/A'}}</p>3
+                        </div>
+                        <div class="col-md-6">
+                          <p class="d-inline-block">Subcategory 3: {{userInfo?.subcategory1[0]?.title || 'N/A'}}</p> 
+                        </div>
+                      </div>-->
+
+                     
+
+                      
+                      
+                    </div>
+                  
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                       
+                        <div class="form-group" *ngFor="let academic of userInfo?.academics">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Institution Name:  {{academic?.institution_name || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Grade: {{academic?.grade || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Area Of Study:  {{academic?.area_of_study || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Degree: {{academic?.degree || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                      
+                        <div class="form-group" *ngFor="let employment of userInfo?.employments">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Company:  {{employment?.company || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Title: {{academic?.title || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Description:  {{employment?.description || 'N/A'}}</p> 
+                            </div>                            
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">City: {{employment?.city || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">State:  {{employment?.state || 'N/A'}}</p> 
+                            </div>                            
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Start Year: {{employment?.start_year || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">End Year: {{employment?.end_year || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                     
+                  </div>
+                  <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
+                    <div class="row">
+                      <div class="col-md-12">
+                       
+                        <div class="form-group" *ngFor="let achievement of userInfo?.achievements">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Title:  {{achievement?.title || 'N/A'}}</p> 
+                            </div>                            
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Description:  {{achievement?.description || 'N/A'}}</p> 
+                            </div>                            
+                          </div>  
+                          
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Associated With: {{achievement?.associated_with || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Years of Learning: {{achievement?.years_of_learning || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Start Year: {{achievement?.start_year || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">End Year: {{achievement?.end_year || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                          <div class="row">                            
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Issuer: {{achievement?.issuer || 'N/A'}}</p> 
+                            </div>                           
+                          </div>
+
+                          
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div>
+  </div>

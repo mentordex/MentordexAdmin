@@ -22,10 +22,13 @@ import { ImageUploadDropzoneComponent } from './image-upload-dropzone/image-uplo
 import { AppointmentComponent } from './appointment/appointment.component';
 import { SlotsComponent } from './slots/slots.component';
 import { BannerComponent } from './banner/banner.component';
+import { JobsListingComponent } from './jobs-listing/jobs-listing.component';
+import { MembershipComponent } from './membership/membership.component';
+import { TestimonialsComponent } from './testimonials/testimonials.component';
 
 
 @NgModule({
-  declarations: [AdminsComponent, UsersComponent, CategoryComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent, CountryComponent, StateComponent, CityComponent, ImageUploadDropzoneComponent, AppointmentComponent, SlotsComponent, BannerComponent],
+  declarations: [AdminsComponent, UsersComponent, CategoryComponent, AmenityComponent, DashboardComponent, ProfileComponent, ChangePasswordComponent, OfficesComponent, TeamsComponent, SubcategoryComponent, FaqCategoryComponent, CountryComponent, StateComponent, CityComponent, ImageUploadDropzoneComponent, AppointmentComponent, SlotsComponent, BannerComponent, JobsListingComponent, MembershipComponent, TestimonialsComponent],
   imports: [
     CommonModule,
     HomeRoutingModule,

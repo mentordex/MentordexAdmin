@@ -64,7 +64,7 @@ export class AppointmentComponent implements OnInit {
     this.titleService.setTitle();
     this.fetchListing() 
    
-    this.getAvailableSlotsByDay(this.getCurrentDay);
+    //this.getAvailableSlotsByDay(this.getCurrentDay);
 
   
     this.searchForm=this.formBuilder.group({    
@@ -101,18 +101,18 @@ export class AppointmentComponent implements OnInit {
   /**
    * get Available Slots By Day
   */
- getAvailableSlotsByDay(day): void {
-  this.utilsService.processPostRequest('/dayTimeslot/getAvailableSlots', { day: day }).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-    //console.log('response', response);
-    let getSlots = response['slots'];
-    if (getSlots == false) {
-      this.getAvailableSlots = [];
-    } else {
-      this.getAvailableSlots = getSlots.filter(function (item) {
-        return item.isChecked !== false;
-      });
-    }
-    //console.log('response', this.getAvailableSlots);
+ getAvailableSlotsByDay(day, date): void {
+  
+  this.utilsService.processPostRequest('/dayTimeslot/getAvailableSlots', { day: day, getSelectedDate:date }).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    console.log('response', response);
+      let getSlots = response;
+      if ('slots' in getSlots) {
+        this.getAvailableSlots = [];
+      } else {
+        this.getAvailableSlots = getSlots;
+      }
+      //console.log('response', this.getAvailableSlots);
+       
   })
 }
 
@@ -157,12 +157,12 @@ onDateChange(value: Date): void {
     let selectedDate = new Date(value);
 
 
-    let formatDate = selectedDate.getDate() + '/' + selectedDate.getMonth() + '/' + selectedDate.getFullYear();
+    let formatDate = selectedDate.getDate() + '/' + (selectedDate.getMonth()+1) + '/' + selectedDate.getFullYear();
     this.bookASlotForm.controls.appointment_date.patchValue(formatDate);
 
     let selectedDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][selectedDate.getDay()]
     //this.getCurrentDay = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][new Date().getDay()]
-    this.getAvailableSlotsByDay(selectedDay);
+    this.getAvailableSlotsByDay(selectedDay, formatDate);
   }
 
   

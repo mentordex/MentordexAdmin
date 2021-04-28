@@ -1,3 +1,4 @@
+<app-breadcrumbs [pageTitle]="title" [breadcrumbs]="breadcrumbs"></app-breadcrumbs>
 <mk-box header="{{formStatus}}  Admin" [isLoading]="isLoading" [isCollapsed]="isCollapsed" [isCollapsable]="true" [isRemovable]="false">
   
     <div class="box box-info">
@@ -73,9 +74,9 @@
     </div>
     <!--Ends Here-->
 
-    <a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
+    <!--<a  *ngIf="(pagination.search).length>0" style="float: right;" href="javascript:void(0)" (click)="resetSearch()">
         <i title="Reset Search" class="fa fa-repeat"></i> 
-    </a>  
+    </a>  -->
       
   </div>
   <!-- /.box-header -->

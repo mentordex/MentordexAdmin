@@ -17,8 +17,8 @@ import * as Dropzone from 'dropzone';
   styleUrls: ['./about-us.component.css']
 })
 export class AboutUsComponent implements OnInit {
-  title: string = 'Team Listings';
-  breadcrumbs: any[] = [{ page: 'Home', link: '/home' },{page: 'Team Listings', link: ''}]
+  title: string = 'About Us';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' },{page: 'About Us', link: ''}]
   destroy$: Subject<boolean> = new Subject<boolean>();
   public imageUploadconfig1: DropzoneConfigInterface;
   public imageUploadconfig2: DropzoneConfigInterface;
@@ -385,9 +385,9 @@ export class AboutUsComponent implements OnInit {
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
     this.utilsService.processPostRequest('/about/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {
       if(this.addEditForm.get('_id').value)        
-        this.utilsService.onSuccess(environment.MESSAGES['TEAM-SUCCESSFULLY-UPDATED']);
+        this.utilsService.onSuccess(environment.MESSAGES['ABOUT-SUCCESSFULLY-UPDATED']);
       else        
-        this.utilsService.onSuccess(environment.MESSAGES['TEAM-SUCCESSFULLY-SAVED']); 
+        this.utilsService.onSuccess(environment.MESSAGES['ABOUT-SUCCESSFULLY-SAVED']); 
         
         this.utilsService.hidePageLoader();//hide page loader
         this.fetchAboutContent()

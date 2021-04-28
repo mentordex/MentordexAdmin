@@ -1,4 +1,49 @@
-.modal-dialog {
-    width: 800px!important;
-    margin-left: 236px !important
+#bmodal .modal-dialog {
+    width: 56% !important;
+    max-width: 100% !important;
+    margin: auto;
+    z-index: 1060 !important;
 }
+aside.main-sidebar {
+    z-index: 99;
+}
+#bmodal .nav-tabs {
+    margin-bottom: 15px;
+    padding-left: 40px;
+    border-bottom: 0.5px solid #F0F0F0;
+}
+#bmodal .nav-tabs li.nav-item a {
+    font-weight: 400;
+    color: #1b1b1b;
+    font-size: 14px;
+    border: 0px;
+}
+#bmodal .nav-tabs li.nav-item.active a {
+    font-weight: 600;
+    border-bottom: 1px solid #3bb3bd;
+    color: #3bb3bd;
+}
+#bmodal .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 0px;
+    padding-top: 20px;
+}
+#bmodal button.close {
+    position: absolute;
+    right: -12px;
+    top: -60px;
+    padding: 0 !important;
+    margin: 0px !important;
+    background: #3bb3bd;
+    opacity: 1;
+    padding: 15px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    line-height: normal;
+    color: #fff;
+    font-size: 18px;
+}
+#bmodal .btn-primary {background: #4dbac3;display: inline-block;padding: 10px 20px;border: 1px solid #3bb3bd;font-size: 12px;line-height: normal;border-radius: 0px;}
+#bmodal .btn-primary:focus {outline: none;}

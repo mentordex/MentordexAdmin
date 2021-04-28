@@ -18,6 +18,9 @@ import { CityComponent } from './location/city/city.component';
 import { AppointmentComponent } from './appointment/appointment.component';
 import { SlotsComponent } from './slots/slots.component';
 import { BannerComponent } from './banner/banner.component';
+import { JobsListingComponent } from './jobs-listing/jobs-listing.component';
+import { MembershipComponent } from './membership/membership.component';
+import { TestimonialsComponent } from './testimonials/testimonials.component';
 
 const routes: Routes = [
   {
@@ -131,11 +134,24 @@ const routes: Routes = [
     component:   BannerComponent ,   
     data: { title: 'Banners List' }
   },
-
+  {
+    path: 'jobs',
+    component:   JobsListingComponent ,   
+    data: { title: 'Jobs Listing' }
+  },
+  {
+    path: 'Memberships',
+    component:   MembershipComponent ,   
+    data: { title: 'Membership Listing' }
+  },
+  {
+    path: 'reviews',
+    component:   TestimonialsComponent ,   
+    data: { title: 'Testimonials & Reviews' }
+  }
   
 
-  
-
+   
   
   
 ];

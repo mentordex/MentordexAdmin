@@ -19,6 +19,8 @@ import Swal from 'sweetalert2'
 export class AdminsComponent implements OnInit {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
+  title: string = 'Admin Listing';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Admin Listing', link: '' }]
   isLoading:boolean = false;
   isCollapsed:boolean = true;
   formStatus:string = 'Add'

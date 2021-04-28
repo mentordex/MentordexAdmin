@@ -7,6 +7,8 @@ import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@ang
 import { TitleService, UtilsService } from '../../core/services'
 import { environment } from '../../../environments/environment'
 import Swal from 'sweetalert2'
+declare var $;
+
 
 @Component({
   selector: 'app-users',
@@ -14,7 +16,8 @@ import Swal from 'sweetalert2'
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-
+  title: string = 'Users';
+  breadcrumbs: any[] = [{ page: 'Home', link: '/home' }, { page: 'Users', link: '' }]
   destroy$: Subject<boolean> = new Subject<boolean>();
   isLoading:boolean = false;
   selectedTab:string =''
@@ -33,6 +36,7 @@ export class UsersComponent implements OnInit {
 
   searchForm: FormGroup;
   isSearchFormSubmitted:boolean = false;
+  userInfo:any = {}
 
   constructor(private utilsService: UtilsService, private titleService: TitleService, private formBuilder:FormBuilder) { 
  
@@ -52,6 +56,16 @@ export class UsersComponent implements OnInit {
       search: [null, [Validators.required]],
     })
     
+  }
+
+  showUserInfo(record){
+    this.userInfo = record 
+    console.log('info',this.userInfo)  
+    if(record.role='MENTOR') 
+      $('#mentorinfoModal').modal({show:true})
+
+    if(record.role='PARENT') 
+      $('#parentinfoModal').modal({show:true})
   }
 
   fetchListing(){

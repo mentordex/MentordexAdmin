@@ -27,6 +27,13 @@ export const environment = {
     "OFFICE-SUCCESSFULLY-UPDATED":"The office record has been successfully updated.",
     "TEAM-SUCCESSFULLY-SAVED":"New team has been added successfully.",
     "TEAM-SUCCESSFULLY-UPDATED":"The team record has been successfully updated.",
+    "ABOUT-SUCCESSFULLY-SAVED":"About page content has been added successfully.",
+    "ABOUT-SUCCESSFULLY-UPDATED":"About  page content has been successfully updated.",
+    "MEMBERSHIP-SUCCESSFULLY-SAVED":"Membership plan has been added successfully.",
+    "MEMBERSHIP-SUCCESSFULLY-UPDATED":"Membership plan has been successfully updated.",
+    "REVIEW-SUCCESSFULLY-SAVED":"Review plan has been added successfully.",
+    "REVIEW-SUCCESSFULLY-UPDATED":"Review plan has been successfully updated.",
+    "FETCHING-RECORD":"Fetching Record Data"
   }
 };
 

@@ -29,8 +29,13 @@ export const adminLteConf = {
   
     {label: `Office Listings`, route: 'home/offices', iconClasses: 'fa fa-tasks'},
     {label: `Team Listings`, route: 'home/team', iconClasses: 'fa fa-tasks'},   
-    {label: `Banner Listings`, route: 'home/banners', iconClasses: 'fa fa-tasks'}, 
-      
+    {label: `Banner Listings`, route: 'home/banners', iconClasses: 'fa fa-tasks'},
+    {label: `Jobs Listings`, route: 'home/jobs', iconClasses: 'fa fa-tasks'}, 
+    {label: `Membership Listings`, route: 'home/Memberships', iconClasses: 'fa fa-tasks'},
+    {label: `Reviews & Testimonials`, route: 'home/reviews', iconClasses: 'fa fa-tasks'}, 
+    
+    
+
     {label: "CMS", iconClasses: 'fa fa-tasks', children: [
       {label: "About Us", route: 'cms/about-us'}
     ]},
