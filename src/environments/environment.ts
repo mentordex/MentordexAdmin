@@ -35,8 +35,8 @@ export const environment = {
     "ABOUT-SUCCESSFULLY-UPDATED":"About  page content has been successfully updated.",
     "MEMBERSHIP-SUCCESSFULLY-SAVED":"Membership plan has been added successfully.",
     "MEMBERSHIP-SUCCESSFULLY-UPDATED":"Membership plan has been successfully updated.",
-    "REVIEW-SUCCESSFULLY-SAVED":"Review plan has been added successfully.",
-    "REVIEW-SUCCESSFULLY-UPDATED":"Review plan has been successfully updated.",
+    "REVIEW-SUCCESSFULLY-SAVED":"Testimonial has been added successfully.",
+    "REVIEW-SUCCESSFULLY-UPDATED":"Testimonial has been successfully updated.",
     
     "FETCHING-RECORD":"Fetching Record Data"
     

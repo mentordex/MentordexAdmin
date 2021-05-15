@@ -17,30 +17,31 @@
         <div class="box-body">          
           <div class="form-group">
               <label>Title*</label>
-              <input formControlName="title" minLength=10 maxLength=100 class="form-control" type="text" placeholder="Membership Title">  
+              <input formControlName="title" class="form-control" type="text" placeholder="Membership Title">  
               <p class="errorCls"  *ngIf="addEditForm.controls.title.touched || isFormSubmitted">
-                  <app-form-validation-errors errorPrefix="Title " [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
+                  <app-form-validation-errors errorPrefix="Title " minLength="10" maxLength="100" [errors]="addEditForm.get('title').errors"></app-form-validation-errors>
               </p>          
           </div>
+
           <div class="form-group">
             <label>Description*</label>
-            <textarea minLength=10 maxLength=500 formControlName="description" class="form-control"  placeholder="Membership Description"></textarea> 
+            <textarea  formControlName="description" class="form-control"  placeholder="Membership Description"></textarea> 
             <p class="errorCls"  *ngIf="addEditForm.controls.description.touched || isFormSubmitted">
-                  <app-form-validation-errors errorPrefix="Description " [errors]="addEditForm.get('description').errors"></app-form-validation-errors>
+                  <app-form-validation-errors minLength="10" maxLength="500" errorPrefix="Description " [errors]="addEditForm.get('description').errors"></app-form-validation-errors>
               </p>
                     
           </div>
           <div class="form-group">
             <label>Price*</label>
-            <input formControlName="price" minLength=1 maxLength=10 class="form-control" type="number" placeholder="Price">  
+            <input [readonly]="formStatus=='Update'" formControlName="price" class="form-control" type="number" placeholder="Price">  
             <p class="errorCls"  *ngIf="addEditForm.controls.price.touched || isFormSubmitted">
-                <app-form-validation-errors errorPrefix="Price " [errors]="addEditForm.get('price').errors"></app-form-validation-errors>
+                <app-form-validation-errors errorPrefix="Price " minValue="1" maxValue="100000" [errors]="addEditForm.get('price').errors"></app-form-validation-errors>
             </p>          
           </div>
 
           <div  class="form-group">
             <label>Type*</label>
-            <select formControlName="type" class="form-control">
+            <select [attr.disabled]="formStatus=='Update'?true:false" formControlName="type" class="form-control">
               <option value="">Select Type</option>
               <option value="day">Daily</option>            
               <option value="week">Weekly</option>
@@ -115,7 +116,7 @@
               <th>Created On</th>
               <th>Updated On</th> 
               <th>Status</th>
-              <!--<th>Action</th>-->
+              <th>Action</th>
             </tr>
           </thead>
           <tbody *ngIf="records.length>0">
@@ -124,7 +125,7 @@
          
               <td>{{record?.title}}</td> 
               <td>{{record?.description}}</td> 
-              <td>{{record?.price}}</td>                        
+              <td>${{record?.price}}</td>                        
               
               <td>{{record?.created_at | date:'MMM dd, y'}}</td>
               <td>{{record?.modified_at | date:'MMM dd, y'}}</td>
@@ -136,12 +137,12 @@
                 </label>
 
               </td>
-              <!--<td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a> | <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a></td>-->
+              <td><a title="Edit Record" href="javascript:void(0)" (click)="editAction(record)"><i class="fa fa-fw fa-edit"></i></a><!--| <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a>--></td>
             </tr>          
           </tbody>
           <tbody *ngIf="records.length<=0" >
             <tr>
-              <td style="text-align:center;" colspan="5">No Record Found.</td>
+              <td style="text-align:center;" colspan="6">No Record Found.</td>
             </tr>
           </tbody>
         </table>

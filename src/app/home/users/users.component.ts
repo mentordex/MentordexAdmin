@@ -61,11 +61,16 @@ export class UsersComponent implements OnInit {
   showUserInfo(record){
     this.userInfo = record 
     console.log('info',this.userInfo)  
-    if(record.role='MENTOR') 
+    if(record.role=='MENTOR'){
+      $('#parentinfoModal').modal({show:false})
       $('#mentorinfoModal').modal({show:true})
+    }
+     
 
-    if(record.role='PARENT') 
+    if(record.role=='PARENT') {
+      $('#mentorinfoModal').modal({show:false})
       $('#parentinfoModal').modal({show:true})
+    }
   }
 
   fetchListing(){
@@ -135,8 +140,15 @@ export class UsersComponent implements OnInit {
     
   }
 
-  changeStatus(record, status){
-    Swal.fire({
+  changeStatus(event, record){
+    var status = (event.target.checked)?'ACTIVE':'IN-ACTIVE'
+    this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
+    this.utilsService.processPostRequest('/admin/changeStatus',{id:record._id, is_active:status}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+      this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
+      this.fetchListing()          
+    })
+
+    /*Swal.fire({
       title: 'Are you sure to change login permission for user?',     
       icon: 'warning',
       showCancelButton: true,
@@ -144,13 +156,14 @@ export class UsersComponent implements OnInit {
       cancelButtonText: 'No, keep it'
     }).then((result) => {
       if (result.value) {
+        var status = (event.target.checked)?'ACTIVE':'IN-ACTIVE'
         this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
         this.utilsService.processPostRequest('/admin/changeStatus',{id:record._id, is_active:status}).pipe(takeUntil(this.destroy$)).subscribe((response) => {
           this.utilsService.onSuccess(environment.MESSAGES['SUCCESSFULLY-SAVED']); 
           this.fetchListing()          
         })
       } 
-    })
+    })*/
   }
 
   onSearch(){

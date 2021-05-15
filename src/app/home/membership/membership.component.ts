@@ -51,9 +51,9 @@ export class MembershipComponent implements OnInit {
       id:[null],
       title: [null, [Validators.required, Validators.minLength(10),Validators.maxLength(100)]],
       description: [null, [Validators.required, Validators.minLength(10),Validators.maxLength(500)]],
-      price: [null, [Validators.required, Validators.minLength(1),Validators.maxLength(10)]],  
+      price: [null, [Validators.required, Validators.max(100000), Validators.min(1)]],  
       price_id:[null],
-      type:[null, [Validators.required]],
+      type:['', [Validators.required]],
       product_id:[null],       
       is_active:[true], 
     })
@@ -61,6 +61,21 @@ export class MembershipComponent implements OnInit {
     this.searchForm=this.formBuilder.group({    
       search: [null, [Validators.required]],
     })
+    
+  }
+
+  editAction(record){
+    this.formStatus = 'Update'
+    this.isCollapsed = false;
+    this.addEditForm.patchValue({ id: record._id})
+    this.addEditForm.patchValue({ title: record.title})
+    this.addEditForm.patchValue({ description: record.description})
+    this.addEditForm.patchValue({ price: record.price})
+    this.addEditForm.patchValue({ price_id: record.price_id})
+    this.addEditForm.patchValue({ type: record.type})
+    this.addEditForm.patchValue({ product_id: record.product_id})
+    this.addEditForm.patchValue({ is_active: record.is_active})
+    
     
   }
 
@@ -83,6 +98,9 @@ export class MembershipComponent implements OnInit {
     this.pagination['search'] = this.searchForm.get('search').value 
     this.fetchListing()
   }
+
+  
+
   cancelEdit(){
     this.addEditForm.reset();
     this.addEditForm.patchValue({ is_active: true})

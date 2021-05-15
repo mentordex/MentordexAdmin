@@ -186,15 +186,15 @@
                     </div>
                     <div class="row">
                       <div class="col-md-6">
-                        <p class="d-inline-block">Country: {{(mentorInfo?.country[0]?.title) || 'N/A'}}</p> 
+                        <p class="d-inline-block">Country: {{(mentorInfo?.country?.value) || 'N/A'}}</p> 
                       </div>
                       <div class="col-md-6">
-                        <p class="d-inline-block">State:  {{(mentorInfo?.state[0]?.title) || 'N/A'}}</p> 
+                        <p class="d-inline-block">State:  {{(mentorInfo?.state?.value) || 'N/A'}}</p> 
                       </div>
                     </div>
                     <div class="row">
                       <div class="col-md-6">
-                        <p class="d-inline-block">City:  {{(mentorInfo?.city[0]?.title) || 'N/A'}}</p> 
+                        <p class="d-inline-block">City:  {{(mentorInfo?.city?.value) || 'N/A'}}</p> 
                       </div>
                       <div class="col-md-6">
                         <p class="d-inline-block">Zipcode: {{mentorInfo?.zipcode || 'N/A'}}</p> 
@@ -223,12 +223,30 @@
                   <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                     <div class="row">
                       <div class="col-md-6">
-                        <p class="d-inline-block">Category:  {{(mentorInfo?.category[0]?.title) || 'N/A'}}</p> 
+                        <p class="d-inline-block">Category1:  {{(mentorInfo?.category1?.value) || 'N/A'}}</p> 
                       </div>
                       <div class="col-md-6">
-                        <p class="d-inline-block">Subcategories: {{mentorInfo?.subcategory1[0]?.title || 'N/A'}}, {{mentorInfo?.subcategory2[0]?.title || 'N/A'}}, {{mentorInfo?.subcategory3[0]?.title || 'N/A'}}</p> 
+                        <p class="d-inline-block">Subcategory1: {{mentorInfo?.subcategory1?.value || 'N/A'}}</p> 
                       </div>
-                    </div>                     
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Category2:  {{(mentorInfo?.category2?.value) || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Subcategory2: {{mentorInfo?.subcategory2?.value || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Category3:  {{(mentorInfo?.category3?.value) || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Subcategory3: {{mentorInfo?.subcategory3?.value || 'N/A'}}</p> 
+                      </div>
+                    </div>
                   </div>
                   <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                     <div class="row">

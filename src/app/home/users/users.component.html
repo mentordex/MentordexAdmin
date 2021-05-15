@@ -12,9 +12,9 @@
     <!--Tabs-->
     <div style="width:30%" class="nav-tabs-custom">
       <ul class="nav nav-tabs">
-        <li [ngClass]="{'active':selectedTab==''}"><a (click)="changeTab('')" href="javascript:void()">All</a></li>
-        <li [ngClass]="{'active':selectedTab=='PARENT'}"><a (click)="changeTab('PARENT')" href="#tab_2" href="javascript:void()">Parents</a></li>
-        <li [ngClass]="{'active':selectedTab=='MENTOR'}"><a (click)="changeTab('MENTOR')" href="#tab_3" href="javascript:void()">Mentors</a></li>
+        <li [ngClass]="{'active':selectedTab==''}"><a (click)="changeTab('')" href="javascript:void(0)">All</a></li>
+        <li [ngClass]="{'active':selectedTab=='PARENT'}"><a (click)="changeTab('PARENT')" href="#tab_2" href="javascript:void(0)">Parents</a></li>
+        <li [ngClass]="{'active':selectedTab=='MENTOR'}"><a (click)="changeTab('MENTOR')" href="#tab_3" href="javascript:void(0)">Mentors</a></li>
       </ul>
     </div>
     <!--Ends Here-->
@@ -60,21 +60,31 @@
         </thead>
         <tbody *ngIf="records.length>0">
           <tr *ngFor="let record of records | paginate: { id: 'listing', itemsPerPage: pagination.size, currentPage: pagination.pageNumber, totalItems: totalRecords }">
-            <td scope="row"><img class="listing-img" src="{{record?.profile_pic}}" onerror="this.src='assets/img/avatar.png'"></td>
+            <td scope="row">
+              <img *ngFor="let image of record?.profile_image" class="listing-img" src="{{image?.file_path}}" onerror="this.src='assets/img/avatar.png'">
+
+              <img *ngIf="record?.profile_image?.length<=0" class="listing-img" src="assets/img/avatar.png">
+
+              
+
+            </td>
        
             <td>{{record?.first_name}}</td>
             <td>{{record?.email}}</td>
-            <td>{{record?.role |  firstLetterCapital}}</td>   
-            <td>{{record?.is_active | firstLetterCapital}}</td>
+            <td>{{record?.role |  firstLetterCapital}}</td>  
+            <td>
+                
+              <label class="switch">
+                <input type="checkbox" (change)="changeStatus($event, record)" [checked]="(record?.is_active=='ACTIVE')?true:false">
+                <span class="slider round"></span>
+              </label>
+
+            </td>
             <td>{{record?.created_at | date:'MMM dd, y'}}</td>
             <td>
               <a title="View Mentor Information" (click)="showUserInfo(record)" href="javascript:void(0)"><i class="fa fa-fw fa-eye"></i></a>
 
              <a title="Delete Record" href="javascript:void(0)" (click)="delete(record)"><i class="fa fa-fw fa-remove"></i></a>
-
-              | <a *ngIf="record.is_active=='INACTIVE'" title="Unlock User: Enable Login Permission" href="javascript:void(0)" (click)="changeStatus(record,'ACTIVE')"><i class="fa fa-fw fa-unlock-alt"></i></a>
-
-               <a *ngIf="record.is_active=='ACTIVE'" title="Lock User: Disable Login Permission" href="javascript:void(0)" (click)="changeStatus(record,'INACTIVE')"><i class="fa fa-fw fa-unlock"></i></a>
               
               </td>
           </tr>          
@@ -113,6 +123,14 @@
                   <li class="nav-item">
                     <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings" aria-selected="false">Achievements</a>
                   </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill" href="#custom-tabs-four-billing" role="tab" aria-controls="custom-tabs-four-billing" aria-selected="false">Payment & Billing</a>
+                  </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-availability-tab" data-toggle="pill" href="#custom-tabs-four-availability" role="tab" aria-controls="custom-tabs-four-availability" aria-selected="false">Availability</a>
+                  </li>
                 </ul>
               </div>
               <div class="card-body">
@@ -120,8 +138,19 @@
                   <div class="tab-pane active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                     <div class="row">
                       <div class="col-md-12">
-                        <p class="d-inline-block">Profile Image:  </p> 
-                      </div>                      
+                        <p class="d-inline-block">
+                          <img *ngFor="let image of userInfo?.profile_image" class="listing-img" src="{{image?.file_path}}" onerror="this.src='assets/img/avatar.png'">
+                          <img *ngIf="!(userInfo?.profile_image)" class="listing-img" src="assets/img/avatar.png">
+                         </p> 
+                      </div>                     
+                      
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="d-inline-block">
+                          Membership Plan: {{(userInfo?.membership_id)?userInfo?.membership[0]['title']:'N/A'}}
+                         </p> 
+                      </div>                     
                       
                     </div>
                     <div class="row">
@@ -131,35 +160,57 @@
                       <div class="col-md-12">
                         <p class="d-inline-block">Tagline:  {{userInfo?.tagline || 'N/A'}}</p>
                       </div>
-                      <div class="col-md-12">
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
                         <p class="d-inline-block">Hourly Rate:  ${{userInfo?.hourly_rate || '0'}}/hr</p>
                       </div>
-                      <div class="col-md-12">
+                      <div class="col-md-6">
                         <p class="d-inline-block">Website:  {{userInfo?.website || 'N/A'}}/hr</p>
                       </div>
+                    </div>
 
-                      <div class="col-md-12">
-                        <p class="d-inline-block">Social Links:  
-                          <span *ngIf="userInfo?.social_links?.linkedin_url">
-                            <a taregt="_blank" [href]="userInfo?.social_links?.linkedin_url">Linkedin</a>&nbsp;
-                          </span>
-                          <span *ngIf="userInfo?.social_links?.twitter_url">
-                            <a taregt="_blank" [href]="userInfo?.social_links?.twitter_url">Twitter</a>&nbsp;
-                          </span>
-                          <span *ngIf="userInfo?.social_links?.instagram_url"><a taregt="_blank" [href]="userInfo?.social_links?.instagram_url">Instagram</a>&nbsp;</span
-                          >
-                        </p>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                          <p class="d-inline-block">Social Links:  
+                            <span *ngIf="userInfo?.social_links?.linkedin_url">
+                              <a taregt="_blank" [href]="userInfo?.social_links?.linkedin_url">Linkedin</a>&nbsp;
+                            </span>
+                            <span *ngIf="userInfo?.social_links?.twitter_url">
+                              <a taregt="_blank" [href]="userInfo?.social_links?.twitter_url">Twitter</a>&nbsp;
+                            </span>
+                            <span *ngIf="userInfo?.social_links?.instagram_url"><a taregt="_blank" [href]="userInfo?.social_links?.instagram_url">Instagram</a>&nbsp;</span
+                            >
+                          </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">City:  {{userInfo?.city?.value || 'N/A'}}</p>
                       </div>
-
-                      
-                      
+                      <div class="col-md-6">
+                        <p class="d-inline-block">State:  {{userInfo?.state?.value || 'N/A'}}</p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Country:  {{userInfo?.country?.value || 'N/A'}}</p>
+                      </div>
                     </div>
                   
                   </div>
+
                   <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                     <div class="row">
                       <div class="col-md-12">
-                       
+                        <div class="form-group" *ngIf="(userInfo?.academics)?.length<=0">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">No Record Found.</p> 
+                            </div>
+                          </div>
+                        </div>
                         <div class="form-group" *ngFor="let academic of userInfo?.academics">
                           <div class="row">
                             <div class="col-md-6">
@@ -183,10 +234,18 @@
                       </div>
                     </div>
                   </div>
+
                   <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                     <div class="row">
                       <div class="col-md-12">
-                      
+                        <div class="form-group" *ngIf="(userInfo?.employments)?.length<=0">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">No Record Found.</p> 
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="form-group" *ngFor="let employment of userInfo?.employments">
                           <div class="row">
                             <div class="col-md-6">
@@ -226,10 +285,18 @@
                     </div>
                      
                   </div>
+
                   <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
                     <div class="row">
                       <div class="col-md-12">
-                       
+                        <div class="form-group" *ngIf="(userInfo?.achievements)?.length<=0">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">No Record Found.</p> 
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="form-group" *ngFor="let achievement of userInfo?.achievements">
                           <div class="row">
                             <div class="col-md-12">
@@ -273,16 +340,135 @@
                       </div>
                     </div>
                   </div>
+
+                  <div class="tab-pane fade" id="custom-tabs-four-billing" role="tabpanel" aria-labelledby="custom-tabs-four-billing">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="d-inline-block text-center">Payment Cards</p> 
+                        <div class="form-group" *ngIf="(userInfo?.payment_details)?.length<=0">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">No Record Found.</p> 
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group" *ngFor="let payment of userInfo?.payment_details">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Default:  {{payment?.default ? 'Yes':'No'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Card Number: {{payment?.credit_card_number || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Card Type:  {{payment?.card_type}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Card Holder Name: {{payment?.card_holder_name || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Expiring Year:  {{payment?.exp_year}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Expiring Month: {{payment?.exp_month || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <p class="d-inline-block text-center">Billing Address</p> 
+                        <div class="form-group" *ngIf="(userInfo?.billing_details)?.length<=0">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">No Record Found.</p> 
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group" *ngFor="let billing of userInfo?.billing_details">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Address1:  {{billing?.address1 || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Address2: {{billing?.address2 || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">City:  {{billing?.city || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Country: {{payment?.country || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">State:  {{billing?.state || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Zipcode: {{payment?.zipcode || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="custom-tabs-four-availability" role="tabpanel" aria-labelledby="custom-tabs-four-availability">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group" *ngIf="(userInfo?.availability)?.length<=0">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">No Record Found.</p> 
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group" *ngFor="let availability of userInfo?.availability">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Date:  {{availability?.date || 'N/A'}}</p> 
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <p class="d-inline-block">Slots:</p> 
+                              <div class="row">
+                                <div class="col-md-3" *ngFor="let slot of availability?.slots">
+                                  <p class="d-inline-block">{{slot?.value}}</p> 
+                                </div>
+                              </div>
+  
+                            </div>
+                          </div>
+                         
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
-              </div>
               <!-- /.card -->
+              </div>
             </div>
-          </div>
-        </div>        
+          </div>        
+        </div>
       </div>
     </div>
   </div>
-
   <div class="modal" id="parentinfoModal" tabindex="-1" role="dialog">
     <div class="modal-dialog"  role="document">
       <div class="modal-content">
@@ -294,180 +480,133 @@
           <div class="row">
             <div class="card card-primary card-outline card-outline-tabs">
               <div class="card-header p-0 border-bottom-0">
-                <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                <ul class="nav nav-tabs" id="parent-custom-tabs-four-tab" role="tablist">
                   <li class="nav-item active">
-                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Basic Details</a>
+                    <a class="nav-link active" id="parent-custom-tabs-four-home-tab" data-toggle="pill" href="#parent-custom-tabs-four-home" role="tab" aria-controls="parent-custom-tabs-four-home" aria-selected="true">Basic Details</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Payment & Billing</a>
+                    <a class="nav-link" id="parent-custom-tabs-four-profile-tab" data-toggle="pill" href="#parent-custom-tabs-four-profile" role="tab" aria-controls="parent-custom-tabs-four-profile" aria-selected="false">Payment & Billing</a>
                   </li>
                 </ul>
+                
               </div>
               <div class="card-body">
-                <div class="tab-content" id="custom-tabs-four-tabContent">
-                  <div class="tab-pane active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                <div class="tab-content" id="parent-custom-tabs-four-tabContent">
+                  <div class="tab-pane active" id="parent-custom-tabs-four-home" role="tabpanel" aria-labelledby="parent-custom-tabs-four-home-tab">
+                    
+                    
+                    
                     
                     <div class="row">
-                      <div class="row">
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Name:  {{userInfo?.first_name || 'N/A'}}</p> 
-                        </div>
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Email: {{userInfo?.email || 'N/A'}}</p> 
-                        </div>
-                      </div>
-                      <!--<div class="row">
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Category 1:  {{userInfo?.category1[0]?.title || 'N/A'}}</p> 
-                        </div>
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Subcategory 1: {{userInfo?.subcategory1[0]?.title || 'N/A'}}</p> 
-                        </div>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Category 2:  {{userInfo?.category2[0]?.title || 'N/A'}}</p> 
-                        </div>
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Subcategory 2: {{userInfo?.subcategory2[0]?.title || 'N/A'}}</p> 
-                        </div>
-                      </div>
+                      <div class="col-md-12">
+                        <p class="d-inline-block">
+                          
+                          <img *ngFor="let image of userInfo?.profile_image" class="listing-img" src="{{image?.file_path}}" onerror="this.src='assets/img/avatar.png'">
+                          <img *ngIf="userInfo?.profile_image?.length<=0" class="listing-img" src="assets/img/avatar.png">
 
-                      <div class="row">
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Category 3:  {{userInfo?.category3[0]?.title || 'N/A'}}</p>3
-                        </div>
-                        <div class="col-md-6">
-                          <p class="d-inline-block">Subcategory 3: {{userInfo?.subcategory1[0]?.title || 'N/A'}}</p> 
-                        </div>
-                      </div>-->
+                          
+                          
+                          
+                        </p> 
+                      </div> 
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Name:  {{userInfo?.first_name || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Email: {{userInfo?.email || 'N/A'}}</p> 
+                      </div>
+                    </div>
 
-                     
-
-                      
-                      
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">City:  {{userInfo?.city?.value || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">State: {{userInfo?.state?.value || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Country:  {{userInfo?.country?.value || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Category 1:  {{userInfo?.category1?.value || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Subcategory 1: {{userInfo?.subcategory1?.value || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Category 2:  {{userInfo?.category2?.value || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Subcategory 2: {{userInfo?.subcategory2?.value || 'N/A'}}</p> 
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Category 3:  {{userInfo?.category3?.value || 'N/A'}}</p> 
+                      </div>
+                      <div class="col-md-6">
+                        <p class="d-inline-block">Subcategory 3: {{userInfo?.subcategory3?.value || 'N/A'}}</p> 
+                      </div>
                     </div>
                   
                   </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+
+                  <div class="tab-pane fade" id="parent-custom-tabs-four-profile" role="tabpanel" aria-labelledby="parent-custom-tabs-four-profile-tab">
                     <div class="row">
-                      <div class="col-md-12">
+                      <div *ngIf="userInfo?.payment_details" class="col-md-12">
                        
-                        <div class="form-group" *ngFor="let academic of userInfo?.academics">
+
+                        <div  class="form-group" *ngFor="let payment of userInfo?.payment_details">
                           <div class="row">
                             <div class="col-md-6">
-                              <p class="d-inline-block">Institution Name:  {{academic?.institution_name || 'N/A'}}</p> 
+                              <p class="d-inline-block">Default:  {{payment?.default ? 'Yes':'No'}}</p> 
                             </div>
                             <div class="col-md-6">
-                              <p class="d-inline-block">Grade: {{academic?.grade || 'N/A'}}</p> 
+                              <p class="d-inline-block">Card Number: {{payment?.credit_card_number || 'N/A'}}</p> 
                             </div>
                           </div>
 
                           <div class="row">
                             <div class="col-md-6">
-                              <p class="d-inline-block">Area Of Study:  {{academic?.area_of_study || 'N/A'}}</p> 
+                              <p class="d-inline-block">Card Type:  {{payment?.card_type}}</p> 
                             </div>
                             <div class="col-md-6">
-                              <p class="d-inline-block">Degree: {{academic?.degree || 'N/A'}}</p> 
+                              <p class="d-inline-block">Card Holder Name: {{payment?.card_holder_name || 'N/A'}}</p> 
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Expiring Year:  {{payment?.exp_year || 'N/A'}}</p> 
+                            </div>
+                            <div class="col-md-6">
+                              <p class="d-inline-block">Expiring Month: {{payment?.exp_month || 'N/A'}}</p> 
                             </div>
                           </div>
 
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
-                    <div class="row">
-                      <div class="col-md-12">
+                        <div *ngIf="!(userInfo?.payment_details)" class="form-group">
+                          <div class="row">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <p class="d-inline-block">No Attched Cards.</p> 
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       
-                        <div class="form-group" *ngFor="let employment of userInfo?.employments">
-                          <div class="row">
-                            <div class="col-md-6">
-                              <p class="d-inline-block">Company:  {{employment?.company || 'N/A'}}</p> 
-                            </div>
-                            <div class="col-md-6">
-                              <p class="d-inline-block">Title: {{academic?.title || 'N/A'}}</p> 
-                            </div>
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-12">
-                              <p class="d-inline-block">Description:  {{employment?.description || 'N/A'}}</p> 
-                            </div>                            
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-6">
-                              <p class="d-inline-block">City: {{employment?.city || 'N/A'}}</p> 
-                            </div>
-                            <div class="col-md-6">
-                              <p class="d-inline-block">State:  {{employment?.state || 'N/A'}}</p> 
-                            </div>                            
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-6">
-                              <p class="d-inline-block">Start Year: {{employment?.start_year || 'N/A'}}</p> 
-                            </div>
-                            <div class="col-md-6">
-                              <p class="d-inline-block">End Year: {{employment?.end_year || 'N/A'}}</p> 
-                            </div>                           
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
-                     
-                  </div>
-                  <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
-                    <div class="row">
-                      <div class="col-md-12">
-                       
-                        <div class="form-group" *ngFor="let achievement of userInfo?.achievements">
-                          <div class="row">
-                            <div class="col-md-12">
-                              <p class="d-inline-block">Title:  {{achievement?.title || 'N/A'}}</p> 
-                            </div>                            
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-12">
-                              <p class="d-inline-block">Description:  {{achievement?.description || 'N/A'}}</p> 
-                            </div>                            
-                          </div>  
-                          
-                          <div class="row">
-                            <div class="col-md-6">
-                              <p class="d-inline-block">Associated With: {{achievement?.associated_with || 'N/A'}}</p> 
-                            </div>
-                            <div class="col-md-6">
-                              <p class="d-inline-block">Years of Learning: {{achievement?.years_of_learning || 'N/A'}}</p> 
-                            </div>                           
-                          </div>
-
-                          <div class="row">
-                            <div class="col-md-6">
-                              <p class="d-inline-block">Start Year: {{achievement?.start_year || 'N/A'}}</p> 
-                            </div>
-                            <div class="col-md-6">
-                              <p class="d-inline-block">End Year: {{achievement?.end_year || 'N/A'}}</p> 
-                            </div>                           
-                          </div>
-
-                          <div class="row">                            
-                            <div class="col-md-6">
-                              <p class="d-inline-block">Issuer: {{achievement?.issuer || 'N/A'}}</p> 
-                            </div>                           
-                          </div>
-
-                          
-
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
+
+                
               </div>
               <!-- /.card -->
             </div>

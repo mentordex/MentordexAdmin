@@ -128,7 +128,7 @@ export class TestimonialsComponent implements OnInit {
       name: [null, [Validators.required]],
       review: [null, [Validators.required]],
       city: [null, [Validators.required]],
-      rating: [null],      
+      rating: [null,[Validators.max(5), Validators.min(0)]],      
       image:[],
       image_object:[],
       is_active:[true]
@@ -225,14 +225,14 @@ export class TestimonialsComponent implements OnInit {
       this.isFormSubmitted= true
       return false;      
     }
-    if(this.addEditForm.get('image').value==null || (this.addEditForm.get('image').value).length<=0){
+    /*if(this.addEditForm.get('image').value==null || (this.addEditForm.get('image').value).length<=0){
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Please add an image'        
       })
       return false;
-    }
+    }*/
     
     this.utilsService.showPageLoader(environment['MESSAGES']['SAVING-INFO']);//show page loader
     this.utilsService.processPostRequest('/review/add',this.addEditForm.value).pipe(takeUntil(this.destroy$)).subscribe((response) => {

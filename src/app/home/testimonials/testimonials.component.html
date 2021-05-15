@@ -40,7 +40,8 @@
           </div>
           <div class="form-group">
             <label>Rating</label>
-            <input formControlName="rating" class="form-control" type="number" placeholder="Enter Rating">  
+            <input formControlName="rating" class="form-control" type="number" placeholder="Enter Rating" > 
+            <app-form-validation-errors errorPrefix="Rating " minValue="0" maxValue="5" [errors]="addEditForm.get('rating').errors"></app-form-validation-errors> 
                     
         </div>
                     
